@@ -1,9 +1,14 @@
 package no.text.editor.view;
 
+import no.text.editor.view.events.CaretKeyHandler;
+
 import javax.swing.*;
+import java.awt.*;
 
 public class Window {
     private JFrame window;
+    private Menu menu;
+    private TextView textView;
 
     public Window() {
         try {
@@ -17,16 +22,30 @@ public class Window {
         this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // adding menu to text editor
-        Menu menu = new Menu();
-        this.window.setJMenuBar(menu.getMenu());
+        this.menu = new Menu();
+        this.window.setJMenuBar(this.menu.getMenu());
 
         // adding no.text.editor.view.TextView
-        TextView textView = new TextView();
-        this.window.add(textView.getTextView());
+        this.textView = new TextView();
+        this.window.add(this.textView.getScollPane(), BorderLayout.CENTER);
 
         this.window.pack();
         this.window.setLocationRelativeTo(null);
         this.window.setSize(400, 400);
         this.window.setVisible(true);
+    }
+
+    // get text view
+    public TextView getTextView() {
+        return this.textView;
+    }
+
+    // get menu
+    public Menu getMenu() {
+        return this.menu;
+    }
+
+    public void activateKeyListner() {
+        this.window.addKeyListener(new CaretKeyHandler(this.textView.getCaretController()));
     }
 }
