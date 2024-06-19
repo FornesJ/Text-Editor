@@ -1,15 +1,21 @@
 package no.text.editor.view;
 
+import no.text.editor.controller.CaretController;
+import no.text.editor.controller.TextController;
 import no.text.editor.view.events.CaretKeyHandler;
+import no.text.editor.view.events.CharacterKeyHandler;
+import no.text.editor.view.events.FunctionKeyHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Window {
     private JFrame window;
     private Menu menu;
     private TextView textView;
 
+    // constructor
     public Window() {
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -29,6 +35,8 @@ public class Window {
         this.textView = new TextView();
         this.window.add(this.textView.getScollPane(), BorderLayout.CENTER);
 
+
+        // packing window and setting initial size
         this.window.pack();
         this.window.setLocationRelativeTo(null);
         this.window.setSize(400, 400);
@@ -45,7 +53,22 @@ public class Window {
         return this.menu;
     }
 
+
     public void activateKeyListner() {
         this.window.addKeyListener(new CaretKeyHandler(this.textView.getCaretController()));
+    }
+
+    public void activateMouseListner() {
+        ArrayList<JLabel> caretLineList = this.textView.getCaretLineList();
+        for (JLabel label: caretLineList)
+            this.textView.activateMouseListner(label);
+    }
+
+    public void activateCharacterKeyListner(TextController textController) {
+        this.window.addKeyListener(new CharacterKeyHandler(textController));
+    }
+
+    public void activateFunctionKeyListner(TextController textController) {
+        this.window.addKeyListener(new FunctionKeyHandler(textController));
     }
 }
