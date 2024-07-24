@@ -1,6 +1,8 @@
 package no.text.editor.view;
 
 import no.text.editor.controller.CaretController;
+import no.text.editor.controller.CommandController;
+import no.text.editor.controller.FileController;
 import no.text.editor.controller.TextController;
 import no.text.editor.view.events.CaretKeyHandler;
 import no.text.editor.view.events.CharacterKeyHandler;
@@ -8,7 +10,6 @@ import no.text.editor.view.events.FunctionKeyHandler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Window {
     private JFrame window;
@@ -53,22 +54,21 @@ public class Window {
         return this.menu;
     }
 
-
-    public void activateKeyListner() {
-        this.window.addKeyListener(new CaretKeyHandler(this.textView.getCaretController()));
+    // get window
+    public JFrame getWindow() {
+        return this.window;
     }
 
-    public void activateMouseListner() {
-        ArrayList<JLabel> caretLineList = this.textView.getCaretLineList();
-        for (JLabel label: caretLineList)
-            this.textView.activateMouseListner(label);
+
+
+
+    // activating event handlers...
+
+    public void activateMenueActionListners(FileController fileController, TextController textController) {
+        this.menu.addActionListners(fileController, textController);
     }
 
-    public void activateCharacterKeyListner(TextController textController) {
-        this.window.addKeyListener(new CharacterKeyHandler(textController));
-    }
-
-    public void activateFunctionKeyListner(TextController textController) {
-        this.window.addKeyListener(new FunctionKeyHandler(textController));
+    public void activateUndoRedoActionListners(CommandController commandController, TextController textController, CaretController caretController) {
+        this.menu.addUndoRedoActionListners(commandController, textController, caretController);
     }
 }

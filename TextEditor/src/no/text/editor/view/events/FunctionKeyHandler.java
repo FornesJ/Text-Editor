@@ -31,7 +31,7 @@ public class FunctionKeyHandler implements KeyListener {
             this.textController.setToLowerCase();
         }
     }
-    
+
     private void activateFuntion(KeyEvent e) {
         int key = e.getKeyCode();
 
@@ -43,6 +43,8 @@ public class FunctionKeyHandler implements KeyListener {
             case KeyEvent.VK_BACK_SPACE:
                 this.textController.deleteTextFromLine();
                 return;
+            case KeyEvent.VK_ENTER:
+                this.textController.addNewLine();
             default:
                 return;
         }

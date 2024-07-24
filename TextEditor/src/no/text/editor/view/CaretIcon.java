@@ -15,7 +15,6 @@ public class CaretIcon {
             this.pos = pos;
         }
         this.addCaretToLine();
-
     }
 
     // placing caretn in a new line

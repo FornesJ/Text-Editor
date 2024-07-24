@@ -15,14 +15,6 @@ public class Line {
         this.label = new JLabel(text);
     }
 
-    public JLabel getLabel() {
-        return label;
-    }
-
-    public void setLabel(JLabel label) {
-        this.label = label;
-    }
-
     public void setText(String text) {
         this.text = text;
     }

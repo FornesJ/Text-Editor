@@ -17,16 +17,33 @@ public class GapBuffer {
         this.buffer = this.s1 + this.s2;
     }
 
-    public void deleteTextFromBuffer() {
+    public char deleteTextFromBuffer() {
+        char c = 0;
         this.setSubstrings();
-        this.s1 = this.s1.substring(0, this.s1.length() - 1);
-        this.gap.setColumnIndex(this.gap.getColumnIndex() - 1);
+
+        if (this.s1.length() > 0) {
+            c = this.buffer.charAt(this.s1.length() - 1);
+            this.s1 = this.s1.substring(0, this.s1.length() - 1);
+            this.gap.setColumnIndex(this.gap.getColumnIndex() - 1);
+        }
+
         this.buffer = this.s1 + this.s2;
+
+        return c;
+    }
+
+    public String newLineFromBuffer() {
+        this.setSubstrings();
+        this.gap.setColumnIndex(0);
+        return this.s2;
     }
 
     private void setSubstrings() {
-        this.s1 = this.buffer.substring(0, this.gap.getColumnIndex());
-        this.s2 = this.buffer.substring(this.gap.getColumnIndex());
+        int index = this.gap.getColumnIndex();
+        if (this.buffer.length() < index)
+            index = this.buffer.length();
+        this.s1 = this.buffer.substring(0, index);
+        this.s2 = this.buffer.substring(index);
     }
 
     public void setBuffer(String buffer) {

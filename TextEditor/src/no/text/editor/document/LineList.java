@@ -116,6 +116,39 @@ public class LineList implements Iterable<Line> {
         return res;
     }
 
+    public Line deleteCurrentLine() {
+        Line res;
+
+        if (this.currentLine.equals(this.firstLine)) {
+            res = this.firstLine;
+            res.getNextLine().setPrevLine(null);
+            this.firstLine = res.getNextLine();
+            this.currentLine = res.getNextLine();
+            res.setNextLine(null);
+            this.reduceLineNumber(this.firstLine);
+            return res;
+        }
+
+        if (this.currentLine.equals(this.lastLine)) {
+            res = this.lastLine;
+            res.getPrevLine().setNextLine(null);
+            this.lastLine = res.getPrevLine();
+            this.currentLine = res.getPrevLine();
+            res.setPrevLine(null);
+            this.numberOfLines--;
+            return res;
+        }
+
+        res = this.currentLine;
+        res.getPrevLine().setNextLine(res.getNextLine());
+        res.getNextLine().setPrevLine(res.getPrevLine());
+        this.currentLine = res.getPrevLine();
+        res.setNextLine(null);
+        res.setPrevLine(null);
+        this.reduceLineNumber(this.currentLine.getNextLine());
+        return res;
+    }
+
     // return lineNumber from string
     public int getLineNumber(String s) {
         if (this.firstLine.getText().equals(s)) {

@@ -1,21 +1,24 @@
 package no.text.editor.document;
 
+import no.text.editor.commands.Command;
+import no.text.editor.commands.CommandStack;
+import no.text.editor.commands.CommandType;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public class TextDocument {
-    //private LinkedList<Line> lines;
     private LineList lineList;
     private GapBuffer gapBuffer;
     private Gap gap;
+    private CommandStack commandStack;
 
     public TextDocument() {
         this.lineList = new LineList();
         this.gap = new Gap();
         this.gapBuffer = new GapBuffer(this.gap);
+        this.commandStack = new CommandStack();
     }
-
-
 
 
 
@@ -47,6 +50,10 @@ public class TextDocument {
 
     public Line deleteLine(int lineNumber) {
         return this.lineList.deleteLine(lineNumber);
+    }
+
+    public Line deleteCurrentLine() {
+        return this.lineList.deleteCurrentLine();
     }
 
     public int getLineNumber(String s) {
@@ -83,8 +90,12 @@ public class TextDocument {
         this.gapBuffer.addTextToBuffer(c);
     }
 
-    public void deleteTextFromBuffer() {
-        this.gapBuffer.deleteTextFromBuffer();
+    public char deleteTextFromBuffer() {
+        return this.gapBuffer.deleteTextFromBuffer();
+    }
+
+    public String newLineFromBuffer() {
+        return this.gapBuffer.newLineFromBuffer();
     }
 
     public void setBuffer(String buffer) {
@@ -114,5 +125,37 @@ public class TextDocument {
 
     public int getColumnIndex() {
         return this.gap.getColumnIndex();
+    }
+
+
+
+
+    // methodes to access text stack
+    public void writeNewCommand(CommandType type) {
+        this.commandStack.write(new Command(type));
+    }
+
+    public CommandType getCommandType() {
+        return this.commandStack.read().getCommandType();
+    }
+
+    public Command readCurrentCommand() {
+        return this.commandStack.read();
+    }
+
+    public void undoCommand() {
+        this.commandStack.undo();
+    }
+
+    public void redoCommand() {
+        this.commandStack.redo();
+    }
+
+    public int getUndoDepth() {
+        return this.commandStack.undoDepth();
+    }
+
+    public int getRedoDepth() {
+        return this.commandStack.redodepth();
     }
 }

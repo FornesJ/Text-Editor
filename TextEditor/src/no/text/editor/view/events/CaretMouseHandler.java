@@ -1,6 +1,7 @@
 package no.text.editor.view.events;
 
 import no.text.editor.controller.CaretController;
+import no.text.editor.controller.CommandController;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -8,15 +9,16 @@ import java.awt.event.MouseListener;
 
 public class CaretMouseHandler implements MouseListener {
     private CaretController caret;
+    private CommandController commandController;
 
     // constructor
-    public CaretMouseHandler(CaretController caret) {
+    public CaretMouseHandler(CaretController caret, CommandController commandController) {
         this.caret = caret;
+        this.commandController = commandController;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        this.placeCaret(e);
     }
 
     @Override
@@ -44,5 +46,7 @@ public class CaretMouseHandler implements MouseListener {
             this.caret.setLine(line);
         this.caret.setColumn(column);
         this.caret.setCaret();
+
+        this.commandController.writeNewCaretPosCommand(this.caret.getLine(), this.caret.getColumn());
     }
 }

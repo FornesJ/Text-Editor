@@ -1,15 +1,18 @@
 package no.text.editor.view.events;
 import no.text.editor.controller.CaretController;
+import no.text.editor.controller.CommandController;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class CaretKeyHandler implements KeyListener {
     private CaretController caret;
+    private CommandController commandController;
 
     // constructor
-    public CaretKeyHandler(CaretController caret) {
+    public CaretKeyHandler(CaretController caret, CommandController commandController) {
         this.caret = caret;
+        this.commandController = commandController;
     }
 
     @Override
@@ -28,30 +31,35 @@ public class CaretKeyHandler implements KeyListener {
 
     private void placeCaret(KeyEvent e) {
         // calling caret controller if any of the arrow keys are pressed
+        int line = this.caret.getLine();
+        int column = this.caret.getColumn();
+
         switch (e.getKeyCode()) {
             // if up arrow key is pressed
             case KeyEvent.VK_UP:
-                this.caret.setLine(this.caret.getLine() - 1);
+                this.caret.setLine(line - 1);
                 this.caret.setCaret();
-                return;
+                break;
             // if down arrow key is pressed
             case KeyEvent.VK_DOWN:
-                this.caret.setLine(this.caret.getLine() + 1);
+                this.caret.setLine(line + 1);
                 this.caret.setCaret();
-                return;
+                break;
             // if left arrow key is pressed
             case KeyEvent.VK_LEFT:
-                this.caret.setColumn(this.caret.getColumn() - 1);
+                this.caret.setColumn(column - 1);
                 this.caret.setCaret();
-                return;
+                break;
             // if right arrow key is pressed
             case KeyEvent.VK_RIGHT:
-                this.caret.setColumn(this.caret.getColumn() + 1);
+                this.caret.setColumn(column + 1);
                 this.caret.setCaret();
-                return;
+                break;
             // else
             default:
-                return;
+                break;
         }
+
+        this.commandController.writeNewCaretPosCommand(this.caret.getLine(), this.caret.getColumn());
     }
 }

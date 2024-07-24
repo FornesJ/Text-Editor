@@ -1,56 +1,68 @@
 package no.text.editor.controller;
 
-import no.text.editor.document.Gap;
 import no.text.editor.document.TextDocument;
 import no.text.editor.view.CaretIcon;
+import no.text.editor.view.TextView;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 public class CaretController {
     private CaretIcon caretIcon;
-    public TextDocument document;
-    //public Gap gap;
-    private ArrayList<JLabel> caretLineList;
+    private TextView textView;
+    private TextDocument document;
+    private CommandController commandController;
 
     // constructor
-    public CaretController(CaretIcon caretIcon, TextDocument document) {
+    public CaretController(CaretIcon caretIcon,
+                           TextDocument document,
+                           TextView textView,
+                           CommandController commandController) {
         this.caretIcon = caretIcon;
         this.document = document;
         this.document.setLineIndex(0);
         this.document.setColumnIndex(0);
+        this.textView = textView;
+        this.commandController = commandController;
     }
+
+
+
+
+
+    // methodes for setting caret in text view...
 
     // setting both witch line and column the caret is placed
     public void setCaret() {
-        this.caretIcon.setCaretLine(this.caretLineList.get(this.document.getLineIndex()));
-        this.caretIcon.setCaretColumn(this.document.getColumnIndex());
-    }
+        if (this.textView.getNumberOfLines() < 0)
+            return;
 
-    public void setCaretRev() {
-        this.caretIcon.setCaretColumn(this.document.getColumnIndex());
-        this.caretIcon.setCaretLine(this.caretLineList.get(this.document.getLineIndex()));
+        int lineIndex = this.document.getLineIndex();
+        int columnIndex = this.document.getColumnIndex();
+        JLabel line = this.textView.getLine(lineIndex);
+        
+        this.caretIcon.setCaretLine(line);
+        this.caretIcon.setCaretColumn(columnIndex);
     }
 
     public void editCaretLine() {
-        this.caretIcon.editCaretLine(this.caretLineList.get(this.document.getLineIndex()), this.document.getColumnIndex());
-    }
-
-    // setting list of JLabels
-    public void setCaretLineList(ArrayList<JLabel> caretLineList) {
-        this.caretLineList = caretLineList;
+        int lineIndex = this.document.getLineIndex();
+        int columnIndex = this.document.getColumnIndex();
+        JLabel line = this.textView.getLine(lineIndex);
+        this.caretIcon.editCaretLine(line, columnIndex);
     }
 
     // finding specified line, if line does not exist, return -1
     public int findLine(JLabel label) {
-        for (JLabel l: this.caretLineList) {
-            if (l.equals(label)) {
-                return this.caretLineList.indexOf(label);
-            }
+        JLabel[] labels = this.textView.getLines();
+        for (int i = 0; i < labels.length; i++) {
+            if (labels[i].equals(label))
+                return i;
         }
-
         return -1;
     }
+
+
+
 
     // getters and setters for line and column in gap model...
     public int getLine() {
@@ -70,8 +82,8 @@ public class CaretController {
         }
 
         // if line number is larger than the amount of lines, set line number to the last line
-        if (line >= caretLineList.size()) {
-            this.document.setLineIndex(caretLineList.size() - 1);
+        if (line >= this.document.getNumberOfLines()) {
+            this.document.setLineIndex(this.document.getNumberOfLines() - 1);
             this.document.setCurrentLine();
             return;
         }
@@ -81,15 +93,32 @@ public class CaretController {
     }
 
     public void setColumn(int column) {
-        // if column number is less than 0, set column number to 0
+        // if column number is less than 0, set column number to the last column of the previous line
         if (column < 0) {
-            this.document.setColumnIndex(0);
+            int line = this.document.getLineIndex();
+
+            if (line == 0) {
+                this.document.setColumnIndex(0);
+                return;
+            }
+
+            this.document.setLineIndex(line - 1);
+            this.document.setCurrentLine();
+            this.document.setColumnIndex(this.document.getCurrentLine().getText().length());
             return;
         }
 
-        // if column number is larger than the length of the current line, set column number to the last column
-        if (column >= this.caretLineList.get(this.document.getLineIndex()).getText().length()) {
-            this.document.setColumnIndex(this.caretLineList.get(this.document.getLineIndex()).getText().length() - 1);
+        // if column number is larger than the length of the current line, set column number to the first column of the next line
+        if (column > this.document.getCurrentLine().getText().length()) {
+            int line = this.document.getLineIndex();
+            if (line == this.document.getNumberOfLines() - 1) {
+                this.document.setColumnIndex(this.document.getCurrentLine().getText().length());
+                return;
+            }
+
+            this.document.setLineIndex(line + 1);
+            this.document.setCurrentLine();
+            this.document.setColumnIndex(0);
             return;
         }
 

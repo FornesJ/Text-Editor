@@ -1,16 +1,12 @@
 package no.text.editor.view;
 
 import no.text.editor.controller.CaretController;
-import no.text.editor.controller.TextController;
-import no.text.editor.document.Line;
-import no.text.editor.document.LineList;
+import no.text.editor.controller.CommandController;
 import no.text.editor.view.events.CaretMouseHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Cursor;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class TextView {
     private final int DEFAULT_TEXT_SIZE = 18;
@@ -20,8 +16,8 @@ public class TextView {
     private JPanel textView;
     private JScrollPane scollPane;
     private CaretController caretController;
-    private ArrayList<JLabel> caretLineList;
-    private TextController textController;
+    private CommandController commandController;
+    private int numberOfLines;
 
     // constructor
     public TextView() {
@@ -31,54 +27,53 @@ public class TextView {
         this.textView.setBackground(this.BACK_GROUND_COLOR);
         this.textView.setFont(this.DEFAULT_FONT);
         this.textView.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        this.textView.setVisible(true);
         this.scollPane = new JScrollPane(this.textView);
-        this.caretLineList = new ArrayList<>();
+        this.numberOfLines = 0;
     }
 
-    // creating text in view
-    public void createTextView(ArrayList<JLabel> lines) {
-        // adding text lines as labels to panel
-        this.caretLineList = lines; // adding label list in order of each line
-        for (JLabel label: lines) {
-            label.setFont(this.DEFAULT_FONT);
-            this.textView.add(label);
+    public JLabel getLine(int line) {
+        return (JLabel) this.textView.getComponent(line);
+    }
+
+    public JLabel[] getLines() {
+        Component[] components = this.textView.getComponents();
+        JLabel[] labels = new JLabel[components.length];
+        for (int i = 0; i < components.length; i++) {
+            labels[i] = (JLabel) components[i];
         }
+        return labels;
     }
 
-    // this may not be used
-    public void updateTextView(String[] textData) {
-        for (String line: textData) {
-            JLabel label = new JLabel(line);
-            this.textView.add(label);
-        }
+    // methodes for editing textView
+    public void updateLine(int line, String newLine) {
+        if (newLine.length() == 0)
+            newLine = " ";
+        ((JLabel) this.textView.getComponent(line)).setText(newLine);
     }
 
-    // function creating caret controller
-    public void setInitialCursorPos(CaretController caretController) {
-        this.caretController = caretController;
-        this.caretController.setCaretLineList(this.caretLineList);
+    public void addLine(int index, JLabel newLine) {
+        this.numberOfLines++;
+        newLine.setFont(this.DEFAULT_FONT);
+        newLine.addMouseListener(new CaretMouseHandler(this.caretController, commandController));
+        this.textView.add(newLine, index);
         this.caretController.setCaret();
     }
 
-    // activating mouse listner
-    public void activateMouseListner(JLabel label) {
-        label.addMouseListener(new CaretMouseHandler(this.caretController));
+    public void deleteLine(int line) {
+        this.numberOfLines--;
+        this.textView.remove(line);
+        this.textView.revalidate();
+        this.textView.repaint();
     }
 
-    // adding text controller to view
-    public void setTextController(TextController textController) {
-        this.textController = textController;
+    public int getNumberOfLines() {
+        return this.numberOfLines;
     }
 
-    // get text view panel
-    public JPanel getTextView() {
-        return this.textView;
-    }
 
-    // get an array list of JLabels contaning text lines
-    public ArrayList<JLabel> getCaretLineList() {
-        return this.caretLineList;
-    }
+
+    // other setters and getters...
 
     // return panel with scrolling abilities
     public JScrollPane getScollPane() {
@@ -90,22 +85,29 @@ public class TextView {
         return this.caretController;
     }
 
-    // methodes for editing textView
-    public void updateLine(int line, String newLine) {
-        this.caretLineList.get(line).setText(newLine);
+    public void setCaretController(CaretController caretController) {
+        this.caretController = caretController;
     }
 
-    public void addLine(int prevLine, JLabel newLine) {
-        this.textView.add(newLine, prevLine);
-        this.caretLineList.set(prevLine, newLine);
+    public void setCommandController(CommandController commandController) {
+        this.commandController = commandController;
     }
 
-    public JLabel getLine(int line) {
-        return this.caretLineList.get(line);
+    // creating text in view
+    public void setTextView(String[] lines) {
+        // adding text lines as labels to panel
+        for (String line: lines) {
+            this.numberOfLines++;
+            JLabel label = new JLabel(line);
+            label.addMouseListener(new CaretMouseHandler(this.caretController, commandController));
+            label.setFont(this.DEFAULT_FONT);
+            label.setVisible(true);
+            this.textView.add(label);
+        }
     }
 
-    public void deleteLine(int line) {
-        this.textView.remove(line);
-        this.caretLineList.remove(line);
+    // function creating caret controller
+    public void setInitialCursorPos() {
+        this.caretController.setCaret();
     }
 }
