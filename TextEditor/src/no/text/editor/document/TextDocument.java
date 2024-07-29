@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class TextDocument {
+    // TextDocument contains references to all models used
     private LineList lineList;
     private GapBuffer gapBuffer;
     private Gap gap;
@@ -90,8 +91,8 @@ public class TextDocument {
         this.gapBuffer.addTextToBuffer(c);
     }
 
-    public char deleteTextFromBuffer() {
-        return this.gapBuffer.deleteTextFromBuffer();
+    public void deleteTextFromBuffer() {
+        this.gapBuffer.deleteTextFromBuffer();
     }
 
     public String newLineFromBuffer() {
@@ -133,10 +134,7 @@ public class TextDocument {
     // methodes to access text stack
     public void writeNewCommand(CommandType type) {
         this.commandStack.write(new Command(type));
-    }
-
-    public CommandType getCommandType() {
-        return this.commandStack.read().getCommandType();
+        // System.out.println(this.commandStack.toString());
     }
 
     public Command readCurrentCommand() {
@@ -145,10 +143,12 @@ public class TextDocument {
 
     public void undoCommand() {
         this.commandStack.undo();
+        // System.out.println(this.commandStack.toString());
     }
 
     public void redoCommand() {
         this.commandStack.redo();
+        // System.out.println(this.commandStack.toString());
     }
 
     public int getUndoDepth() {
@@ -157,5 +157,9 @@ public class TextDocument {
 
     public int getRedoDepth() {
         return this.commandStack.redodepth();
+    }
+
+    public void deleteRedoStack() {
+        this.commandStack.deleteRedoStack();
     }
 }

@@ -10,19 +10,16 @@ public class CaretController {
     private CaretIcon caretIcon;
     private TextView textView;
     private TextDocument document;
-    private CommandController commandController;
 
     // constructor
     public CaretController(CaretIcon caretIcon,
                            TextDocument document,
-                           TextView textView,
-                           CommandController commandController) {
+                           TextView textView) {
         this.caretIcon = caretIcon;
         this.document = document;
         this.document.setLineIndex(0);
         this.document.setColumnIndex(0);
         this.textView = textView;
-        this.commandController = commandController;
     }
 
 

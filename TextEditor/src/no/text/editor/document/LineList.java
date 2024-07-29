@@ -116,6 +116,7 @@ public class LineList implements Iterable<Line> {
         return res;
     }
 
+    // deletes current line
     public Line deleteCurrentLine() {
         Line res;
 
@@ -175,6 +176,7 @@ public class LineList implements Iterable<Line> {
     }
 
 
+
     // helper methode to find line
     private Line findLine(int lineNumber) {
         int lineCounter = 0;
@@ -208,11 +210,13 @@ public class LineList implements Iterable<Line> {
     }
 
 
+
     // line iterator...
     @Override
     public Iterator<Line> iterator() {
         return new LineIterator(this.firstLine);
     }
+
 
 
     // getters...

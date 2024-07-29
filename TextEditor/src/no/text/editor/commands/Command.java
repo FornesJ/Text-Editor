@@ -3,6 +3,7 @@ package no.text.editor.commands;
 import java.util.Set;
 
 public class Command {
+    // command class contains command type, text previous and new caret position
 
     private CommandType commandType;
     private String text;
@@ -13,6 +14,7 @@ public class Command {
         this.commandType = commandType;
     }
 
+    // getters and setters...
     public CommandType getCommandType() {
         return this.commandType;
     }

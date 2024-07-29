@@ -22,7 +22,7 @@ public class TextEditor {
         // controllers
         FileController fileController = new FileController(document);
         CommandController commandController = new CommandController(document);
-        CaretController caretController = new CaretController(caretIcon, document, view, commandController);
+        CaretController caretController = new CaretController(caretIcon, document, view);
         TextController textController = new TextController(window, view, document, fileController, caretController, commandController);
         view.setCaretController(caretController);
         view.setCommandController(commandController);

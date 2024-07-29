@@ -39,27 +39,34 @@ public class CaretKeyHandler implements KeyListener {
             case KeyEvent.VK_UP:
                 this.caret.setLine(line - 1);
                 this.caret.setCaret();
+                this.writeNewCaretPosCommand(line, column);
                 break;
             // if down arrow key is pressed
             case KeyEvent.VK_DOWN:
                 this.caret.setLine(line + 1);
                 this.caret.setCaret();
+                this.writeNewCaretPosCommand(line, column);
                 break;
             // if left arrow key is pressed
             case KeyEvent.VK_LEFT:
                 this.caret.setColumn(column - 1);
                 this.caret.setCaret();
+                this.writeNewCaretPosCommand(line, column);
                 break;
             // if right arrow key is pressed
             case KeyEvent.VK_RIGHT:
                 this.caret.setColumn(column + 1);
                 this.caret.setCaret();
+                this.writeNewCaretPosCommand(line, column);
                 break;
             // else
             default:
                 break;
         }
+    }
 
-        this.commandController.writeNewCaretPosCommand(this.caret.getLine(), this.caret.getColumn());
+    // writes to a command
+    private void writeNewCaretPosCommand(int prevLine, int prevColumn) {
+        this.commandController.writeCaretPosCommand(prevLine, prevColumn, this.caret.getLine(), this.caret.getColumn());
     }
 }

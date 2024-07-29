@@ -8,6 +8,7 @@ import no.text.editor.file.TextFile;
 import java.util.Iterator;
 
 public class FileController {
+    // filecontroller class contains reference to textfile object and textDocument object
     private TextFile file;
     private TextDocument document;
 
@@ -15,6 +16,7 @@ public class FileController {
         this.document = document;
     }
 
+    // reads text from file and returns array of strings
     public String[] readTextFile() {
         if (this.file == null) {
             return new String[0];
@@ -22,6 +24,7 @@ public class FileController {
         return file.readFile();
     }
 
+    // writes text to textfile from textDocument
     public void writeToTextFile() {
         String[] textData = new String[this.document.getNumberOfLines()];
         Iterator<Line> iterator = new LineIterator(this.document.getFirstLine());
@@ -33,7 +36,7 @@ public class FileController {
         this.file.writeToFile(textData);
     }
 
-
+    // getters and setters for textFile
     public TextFile getFile() {
         return file;
     }

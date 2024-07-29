@@ -30,7 +30,7 @@ public class TextController {
         this.document = document;
         this.fileController = fileController;
         this.caretController = caretController;
-        this.commandController = commandController;
+        this. commandController = commandController;
     }
 
     public void setToUpperCase() {
@@ -56,6 +56,10 @@ public class TextController {
         this.view.setTextView(textData);
     }
 
+    public String getCurrentLine() {
+        return this.document.getCurrentLine().getText();
+    }
+
     public void setInitialCursorPos() {
         this.view.setInitialCursorPos();
     }
@@ -70,7 +74,6 @@ public class TextController {
         String s = "";                                                      // string for new line
         int columnIndex = this.document.getColumnIndex();                   // current caret position
         int lineIndex = this.document.getLineIndex();                       // line index from current line
-        this.commandController.saveTextToCommand(lineIndex, columnIndex);   // saving current command text
 
         // if caret position is less than current line length: add text after caret to new line
         if (columnIndex < currentLine.length()) {
@@ -84,10 +87,6 @@ public class TextController {
         int currentLineIndex = this.document.getCurrentLine().getLineNumber();
         this.caretController.setLine(currentLineIndex);
         this.caretController.setColumn(0);
-
-        // adding new line to command stack
-        this.commandController.writeNewLineCommand(this.caretController.getLine(), this.caretController.getColumn());
-        this.commandController.writeTextToCommand(s);
 
         // adding line to text view
         this.view.addLine(currentLineIndex, new JLabel(s));
@@ -103,8 +102,6 @@ public class TextController {
             this.document.setBuffer(this.document.getCurrentLine().getText());
 
             int line = this.caretController.getLine(); int column = this.caretController.getColumn();
-            this.commandController.writeNewTextCommand(line, column);
-            this.commandController.writeTextToCommand(this.document.getBuffer());
         }
 
         // add character to gap buffer
@@ -112,7 +109,6 @@ public class TextController {
 
         // setting current line string and current command as buffer from gap buffer
         this.document.setCurrentLineText(this.document.getBuffer());
-        this.commandController.writeTextToCommand(this.document.getBuffer());
 
         // updating current line in view
         this.view.updateLine(this.document.getLineIndex(), this.document.getCurrentLine().getText());
@@ -129,38 +125,30 @@ public class TextController {
             return;
         }
 
-        this.commandController.saveTextToCommand(lineIndex, columnIndex);
-
         String currentLine = this.document.getCurrentLine().getText();
 
         if (columnIndex == 0 && currentLine.length() == 0) {
             this.removeEmptyLine(lineIndex);
-            this.commandController.writeNewDeletedLineCommand(this.caretController.getLine(), this.caretController.getColumn());
             return;
         }
 
         if (columnIndex == 0) {
             this.appendTextFromRemovedLine(lineIndex);
-            this.commandController.writeNewDeletedLineCommand(this.caretController.getLine(), this.caretController.getColumn());
-            this.commandController.writeTextToCommand(currentLine);
             return;
         }
 
         // set buffer in gap buffer as string from current line
         if (currentLine != this.document.getBuffer()) {
             this.document.setBuffer(currentLine);
-            this.commandController.writeNewDeletedText(lineIndex, columnIndex);
         }
 
         // removing character from line
-        char c = this.document.deleteTextFromBuffer();
+        this.document.deleteTextFromBuffer();
 
         // setting current line string as buffer from gap buffer
         this.document.setCurrentLineText(this.document.getBuffer());
 
         // setting text in deleted text command
-        String s = c + this.commandController.readCommandText();
-        this.commandController.writeTextToCommand(s);
 
         this.view.updateLine(this.document.getLineIndex(), this.document.getCurrentLine().getText());
         this.caretController.editCaretLine();
@@ -213,10 +201,10 @@ public class TextController {
     }
 
     public void activateCharacterKeyListner() {
-        this.window.getWindow().addKeyListener(new CharacterKeyHandler(this));
+        this.window.getWindow().addKeyListener(new CharacterKeyHandler(this, this.caretController, this.commandController));
     }
 
     public void activateFunctionKeyListner() {
-        this.window.getWindow().addKeyListener(new FunctionKeyHandler(this));
+        this.window.getWindow().addKeyListener(new FunctionKeyHandler(this, this.caretController, this.commandController));
     }
 }

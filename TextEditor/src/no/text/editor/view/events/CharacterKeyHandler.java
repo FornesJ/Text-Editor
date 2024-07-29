@@ -1,6 +1,7 @@
 package no.text.editor.view.events;
 
 import no.text.editor.controller.CaretController;
+import no.text.editor.controller.CommandController;
 import no.text.editor.controller.TextController;
 import no.text.editor.main.TextEditor;
 
@@ -8,10 +9,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class CharacterKeyHandler implements KeyListener {
+    // class handling character key presses
     private TextController textController;
+    private CaretController caretController;
+    private CommandController commandController;
 
-    public CharacterKeyHandler(TextController textController) {
+    public CharacterKeyHandler(TextController textController, CaretController caretController, CommandController commandController) {
         this.textController = textController;
+        this.caretController = caretController;
+        this.commandController = commandController;
     }
 
     @Override
@@ -38,20 +44,40 @@ public class CharacterKeyHandler implements KeyListener {
 
     }
 
+    // write number character
     private void typeNumberCharacter(int key) {
+        int prevline = this.caretController.getLine();
+        int prevColumn = this.caretController.getColumn();
         this.textController.addTextToLine((char) key);
+        this.writeCharacterToCommand((char) key, prevline, prevColumn);
     }
 
+    // write letter characters
     private void typeLetterCharacter(int key) {
+        int prevline = this.caretController.getLine();
+        int prevColumn = this.caretController.getColumn();
         this.textController.addTextToLine((char) key);
+        this.writeCharacterToCommand((char) key, prevline, prevColumn);
     }
 
+    // writes special characters
     private void typeSpecialCharacter(int key) {
         String s = KeyEvent.getKeyText(key);
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if ((c >= '!' && c <= '/') || (c >= ':' && c <= '@') || (c >= '[' && c <= '`') || (c >= '{' && c <= '~'))
+            if ((c >= '!' && c <= '/') || (c >= ':' && c <= '@') || (c >= '[' && c <= '`') || (c >= '{' && c <= '~')) {
+                int prevline = this.caretController.getLine();
+                int prevColumn = this.caretController.getColumn();
                 this.textController.addTextToLine(c);
+                this.writeCharacterToCommand(c, prevline, prevColumn);
+            }
         }
+    }
+
+    // writes to a command
+    private void writeCharacterToCommand(char c, int prevLine, int prevColumn) {
+        int newLine = this.caretController.getLine();
+        int newColumn = this.caretController.getColumn();
+        this.commandController.writeTextToCommand(c, prevLine, prevColumn, newLine, newColumn);
     }
 }
