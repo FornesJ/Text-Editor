@@ -1,7 +1,7 @@
 # Text editor made in Java
 
 This is a text editor made in java with openjdk version "18.0.1.1" 2022-04-22.
-It mainly uses the java libraries Swing and AWT for creating the desktop app.
+It mainly uses the java libraries Swing and AWT for creating the desktop app. However instead of just using the standard text area component from the Swing library, the text editing functions are built from the ground up.
 
 ---------------------------------------------------------------------------------
 
@@ -24,3 +24,5 @@ Controllers handels user input and interact with both the view and the model.
 * Command objects storing newlines or deleted lines do not store the text that is transferred to the new line. This sometimes causes text after the caret in the newline or deleted line to be deleted.
 
 * To many newlines and deleted lines can cause reading current line as a **null** instead of an empty string.
+
+* Event handlers for "copy", "cut", "paste" and "select all" have not been implemented yet.
