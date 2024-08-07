@@ -4,7 +4,6 @@ import javax.swing.*;
 
 public class Line {
     private String text; // text content in line
-    private JLabel label;
     private int lineNumber; // line number
     private Line nextLine; // pointer to nextline
     private Line prevLine; // pointer to prev line
@@ -12,7 +11,6 @@ public class Line {
     // constructor
     public Line(String text) {
         this.text = text;
-        this.label = new JLabel(text);
     }
 
     public void setText(String text) {
