@@ -14,7 +14,7 @@ public class TextView {
     private final Font DEFAULT_FONT = new Font("Arial", Font.TRUETYPE_FONT, this.DEFAULT_TEXT_SIZE);
     private final String NEWLINE = "\n";
     private JPanel textView;
-    private JScrollPane scollPane;
+    private JScrollPane scrollPane;
     private CaretController caretController;
     private CommandController commandController;
     private int numberOfLines;
@@ -28,7 +28,7 @@ public class TextView {
         this.textView.setFont(this.DEFAULT_FONT);
         this.textView.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         this.textView.setVisible(true);
-        this.scollPane = new JScrollPane(this.textView);
+        this.scrollPane = new JScrollPane(this.textView);
         this.numberOfLines = 0;
     }
 
@@ -52,7 +52,10 @@ public class TextView {
         ((JLabel) this.textView.getComponent(line)).setText(newLine);
     }
 
-    public void addLine(int index, JLabel newLine) {
+    public void addLine(int index, String s) {
+        if (s.length() == 0)
+            s = " ";
+        JLabel newLine = new JLabel(s);
         this.numberOfLines++;
         newLine.setFont(this.DEFAULT_FONT);
         newLine.addMouseListener(new CaretMouseHandler(this.caretController, commandController));
@@ -77,7 +80,7 @@ public class TextView {
 
     // return panel with scrolling abilities
     public JScrollPane getScollPane() {
-        return this.scollPane;
+        return this.scrollPane;
     }
 
     // returning caret controller
@@ -98,6 +101,8 @@ public class TextView {
         // adding text lines as labels to panel
         for (String line: lines) {
             this.numberOfLines++;
+            if (line.equals(""))
+                line = " ";
             JLabel label = new JLabel(line);
             label.addMouseListener(new CaretMouseHandler(this.caretController, commandController));
             label.setFont(this.DEFAULT_FONT);
@@ -109,5 +114,11 @@ public class TextView {
     // function creating caret controller
     public void setInitialCursorPos() {
         this.caretController.setCaret();
+    }
+
+    public void clearView() {
+        this.textView.removeAll();
+        this.textView.revalidate();
+        this.textView.repaint();
     }
 }

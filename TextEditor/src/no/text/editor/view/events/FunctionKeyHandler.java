@@ -66,11 +66,14 @@ public class FunctionKeyHandler implements KeyListener {
 
         this.textController.deleteTextFromLine();
 
-        if (prevColumn == 0) {
+        if (prevColumn == 0 || s.length() == 0) {
             if (prevline > 0)
                 this.writeDeletedLineCommand(prevline, prevColumn);
         } else {
-            this.writeDeletedTextCommand(s.charAt(prevColumn - 1), prevline, prevColumn);
+            int prevRealColumn = prevColumn;
+            if (prevRealColumn > s.length())
+                prevRealColumn = s.length();
+            this.writeDeletedTextCommand(s.charAt(prevRealColumn - 1), prevline, prevColumn);
         }
     }
 

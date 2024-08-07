@@ -235,4 +235,19 @@ public class LineList implements Iterable<Line> {
     public int getNumberOfLines() {
         return this.numberOfLines;
     }
+
+    @Override
+    public String toString() {
+        Line line = this.firstLine;
+        String s = "---------------------------------\n";
+
+        while (line != null) {
+            s += line.getText() + '\n';
+            line = line.getNextLine();
+        }
+
+        s += "---------------------------------";
+        return s;
+    }
+
 }

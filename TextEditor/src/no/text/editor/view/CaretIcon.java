@@ -39,17 +39,24 @@ public class CaretIcon {
 
     // adding caret icon to line
     private void addCaretToLine() {
-        if (this.pos >= line.getText().length())
-            this.pos = line.getText().length();
+        if (this.line.getText().equals(" "))
+            this.pos = 0;
+
+        if (this.pos >= this.line.getText().length())
+            this.pos = this.line.getText().length();
+
         StringBuffer s = new StringBuffer(this.line.getText());
         s.insert(this.pos, this.CURSOR_ICON);
+
         this.line.setText(s.toString());
     }
 
     // removing caret icon from line
     private void removeCaretFromLine() {
         StringBuffer s = new StringBuffer(this.line.getText());
+
         s.deleteCharAt(this.pos);
+
         this.line.setText(s.toString());
     }
 }

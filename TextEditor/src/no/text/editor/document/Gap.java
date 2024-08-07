@@ -20,4 +20,9 @@ public class Gap {
     public int getColumnIndex() {
         return this.columnIndex;
     }
+
+    @Override
+    public String toString() {
+        return "line: " + this.lineIndex + " column: " + this.columnIndex;
+    }
 }

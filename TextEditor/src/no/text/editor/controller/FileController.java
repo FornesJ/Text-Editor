@@ -27,7 +27,7 @@ public class FileController {
     // writes text to textfile from textDocument
     public void writeToTextFile() {
         String[] textData = new String[this.document.getNumberOfLines()];
-        Iterator<Line> iterator = new LineIterator(this.document.getFirstLine());
+        Iterator<Line> iterator = this.document.getLineIterator();
         int index = 0;
         while (iterator.hasNext()) {
             textData[index] = iterator.next().getText();

@@ -12,13 +12,11 @@ public class TextDocument {
     private LineList lineList;
     private GapBuffer gapBuffer;
     private Gap gap;
-    private CommandStack commandStack;
 
     public TextDocument() {
         this.lineList = new LineList();
         this.gap = new Gap();
         this.gapBuffer = new GapBuffer(this.gap);
-        this.commandStack = new CommandStack();
     }
 
 
@@ -30,11 +28,14 @@ public class TextDocument {
             Line line = new Line(s);
             this.lineList.addLine(line);
         }
+        System.out.println(this.lineList.toString());
     }
 
     public void addLine(String s) {
         Line line = new Line(s);
         this.lineList.addLine(line);
+        System.out.println(this.lineList.toString());
+        System.out.println(this.gap.toString());
     }
 
     public void setCurrentLine() {
@@ -53,8 +54,10 @@ public class TextDocument {
         return this.lineList.deleteLine(lineNumber);
     }
 
-    public Line deleteCurrentLine() {
-        return this.lineList.deleteCurrentLine();
+    public void deleteCurrentLine() {
+        this.lineList.deleteCurrentLine();
+        System.out.println(this.lineList.toString());
+        System.out.println(this.gap.toString());
     }
 
     public int getLineNumber(String s) {
@@ -74,6 +77,12 @@ public class TextDocument {
     }
 
     public Line getCurrentLine() {
+        if (this.lineList.getCurrentLine() == null) {
+            System.out.println("Returnes null:");
+            System.out.println(this.lineList.toString());
+            System.out.println(this.gap.toString());
+        }
+
         return this.lineList.getCurrentLine();
     }
 
@@ -126,40 +135,5 @@ public class TextDocument {
 
     public int getColumnIndex() {
         return this.gap.getColumnIndex();
-    }
-
-
-
-
-    // methodes to access text stack
-    public void writeNewCommand(CommandType type) {
-        this.commandStack.write(new Command(type));
-        // System.out.println(this.commandStack.toString());
-    }
-
-    public Command readCurrentCommand() {
-        return this.commandStack.read();
-    }
-
-    public void undoCommand() {
-        this.commandStack.undo();
-        // System.out.println(this.commandStack.toString());
-    }
-
-    public void redoCommand() {
-        this.commandStack.redo();
-        // System.out.println(this.commandStack.toString());
-    }
-
-    public int getUndoDepth() {
-        return this.commandStack.undoDepth();
-    }
-
-    public int getRedoDepth() {
-        return this.commandStack.redodepth();
-    }
-
-    public void deleteRedoStack() {
-        this.commandStack.deleteRedoStack();
     }
 }

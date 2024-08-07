@@ -1,5 +1,7 @@
 package no.text.editor.controller;
 
+import no.text.editor.document.Line;
+import no.text.editor.document.LineIterator;
 import no.text.editor.document.TextDocument;
 import no.text.editor.view.TextView;
 import no.text.editor.view.Window;
@@ -8,6 +10,7 @@ import no.text.editor.view.events.CharacterKeyHandler;
 import no.text.editor.view.events.FunctionKeyHandler;
 
 import javax.swing.*;
+import java.util.Iterator;
 
 public class TextController {
     private TextView view;
@@ -30,7 +33,7 @@ public class TextController {
         this.document = document;
         this.fileController = fileController;
         this.caretController = caretController;
-        this. commandController = commandController;
+        this.commandController = commandController;
     }
 
     public void setToUpperCase() {
@@ -89,7 +92,8 @@ public class TextController {
         this.caretController.setColumn(0);
 
         // adding line to text view
-        this.view.addLine(currentLineIndex, new JLabel(s));
+        this.updateTextView();
+        this.caretController.setCaret();
     }
 
     public void addTextToLine(char c) {
@@ -127,7 +131,7 @@ public class TextController {
 
         String currentLine = this.document.getCurrentLine().getText();
 
-        if (columnIndex == 0 && currentLine.length() == 0) {
+        if (currentLine.length() == 0) {
             this.removeEmptyLine(lineIndex);
             return;
         }
@@ -148,8 +152,7 @@ public class TextController {
         // setting current line string as buffer from gap buffer
         this.document.setCurrentLineText(this.document.getBuffer());
 
-        // setting text in deleted text command
-
+        // updating line and adding caret to new position
         this.view.updateLine(this.document.getLineIndex(), this.document.getCurrentLine().getText());
         this.caretController.editCaretLine();
     }
@@ -166,31 +169,52 @@ public class TextController {
 
     private void removeEmptyLine(int lineIndex) {
         this.document.deleteCurrentLine();
-        this.view.deleteLine(lineIndex);
 
         int currentLineIndex = this.document.getCurrentLine().getLineNumber();
         int currentColumnIndex = this.document.getCurrentLine().getText().length();
         this.caretController.setLine(currentLineIndex);
         this.caretController.setColumn(currentColumnIndex);
+
+        this.updateTextView();
 
         this.caretController.editCaretLine();
     }
 
     private void appendTextFromRemovedLine(int lineIndex) {
-        String s = this.document.deleteCurrentLine().getText();
+        String s = this.document.getCurrentLine().getText();
+        this.document.deleteCurrentLine();
 
         int currentLineIndex = this.document.getCurrentLine().getLineNumber();
         int currentColumnIndex = this.document.getCurrentLine().getText().length();
         this.caretController.setLine(currentLineIndex);
         this.caretController.setColumn(currentColumnIndex);
 
-        this.view.deleteLine(lineIndex);
+        this.updateTextView();
 
         String currentLine = this.document.getCurrentLine().getText();
         this.document.setCurrentLineText(currentLine + s);
 
         this.view.updateLine(currentLineIndex, this.document.getCurrentLine().getText());
         this.caretController.editCaretLine();
+    }
+
+    private void updateTextView() {
+        String[] textData = new String[this.document.getNumberOfLines()];
+        Iterator<Line> iterator = this.document.getLineIterator();
+        int index = 0;
+        while (iterator.hasNext()) {
+            Line line = iterator.next();
+
+            if (line.getText() == null) {
+                this.document.deleteLine(line.getLineNumber());
+            } else {
+                textData[index] = line.getText();
+                index++;
+            }
+        }
+
+        this.view.clearView();
+        this.view.setTextView(textData);
     }
 
 
