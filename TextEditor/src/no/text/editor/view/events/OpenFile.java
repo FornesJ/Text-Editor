@@ -33,7 +33,7 @@ public class OpenFile implements ActionListener {
             this.fileController.setFile(newFile);
 
             this.textController.createTextView();
-            this.textController.setInitialCursorPos();
+            // this.textController.setInitialCursorPos();
             this.textController.activateKeyListner();
             this.textController.activateCharacterKeyListner();
             this.textController.activateFunctionKeyListner();

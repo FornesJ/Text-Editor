@@ -51,11 +51,6 @@ public class LineList implements Iterable<Line> {
         this.currentLine = this.findLine(lineNumber);
     }
 
-    // setting text in current line
-    public void setCurrentLineText(String s) {
-        this.currentLine.setText(s);
-    }
-
     // gets line specified by linenumber
     public Line getLine(int lineNumber) {
         if (lineNumber == 0) {

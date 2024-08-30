@@ -75,17 +75,11 @@ public class TextView {
     }
 
 
-
     // other setters and getters...
 
     // return panel with scrolling abilities
     public JScrollPane getScollPane() {
         return this.scrollPane;
-    }
-
-    // returning caret controller
-    public CaretController getCaretController() {
-        return this.caretController;
     }
 
     public void setCaretController(CaretController caretController) {
@@ -109,11 +103,6 @@ public class TextView {
             label.setVisible(true);
             this.textView.add(label);
         }
-    }
-
-    // function creating caret controller
-    public void setInitialCursorPos() {
-        this.caretController.setCaret();
     }
 
     public void clearView() {

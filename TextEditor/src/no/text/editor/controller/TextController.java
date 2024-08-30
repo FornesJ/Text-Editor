@@ -45,45 +45,53 @@ public class TextController {
     }
 
     public void createTextView() {
+        // getting all text from file as an array of strings
         String[] textData = fileController.readTextFile();
 
+        // if array/file is empty - fill array with one empty string
         if (textData.length == 0) {
-            this.document.addLine("");
-            this.document.setCurrentLine();
-            this.view.setTextView(new String[]{""});
-            return;
+            textData = new String[]{""};
         }
 
+        // add all the strings from the array as lines in the model
         this.document.addLines(textData);
+
+        // set the current line in the model
         this.document.setCurrentLine();
+
+        // fill the text view with the text from the array/file
         this.view.setTextView(textData);
+        this.caretController.setCaret();
     }
 
     public String getCurrentLine() {
+        // return current line as a string
         return this.document.getCurrentLine().getText();
     }
 
-    public void setInitialCursorPos() {
-        this.view.setInitialCursorPos();
-    }
-
     public void addNewLine() {
-        String currentLine = this.document.getCurrentLine().getText();      // getting currentLine
+        Line line = this.document.getCurrentLine();
+        if (line != null) {
+            //System.out.println(line.toString());
+        }
 
-        // if buffer is not equal to current line
-        if (currentLine != this.document.getBuffer())
-            this.document.setBuffer(currentLine);
+        String s = "";
+        int columnIndex = this.caretController.getColumn();
+        int lineIndex = this.caretController.getLine();
 
-        String s = "";                                                      // string for new line
-        int columnIndex = this.document.getColumnIndex();                   // current caret position
-        int lineIndex = this.document.getLineIndex();                       // line index from current line
+        // if current line index does not correspond to current line in model - change to current line in model
+        if (this.document.getCurrentLine().getLineNumber() != lineIndex) {
+            this.document.setCurrentLine();
+        }
+
+        String currentLine = this.document.getCurrentLine().getText();
 
         // if caret position is less than current line length: add text after caret to new line
         if (columnIndex < currentLine.length()) {
-            s = this.getNewLineText(currentLine, lineIndex, columnIndex);
+            s = this.getNewLineText(lineIndex, columnIndex);
         }
 
-        // adding new line to memmory
+        // adding newline to model
         this.document.addLine(s);
 
         // current line is now the new line
@@ -91,31 +99,39 @@ public class TextController {
         this.caretController.setLine(currentLineIndex);
         this.caretController.setColumn(0);
 
-        // adding line to text view
+        // updating text view
         this.updateTextView();
+
+        // updating caret position
         this.caretController.setCaret();
     }
 
     public void addTextToLine(char c) {
+        // checking if set to uppercase
         if (! this.isUppercase) {
             c = Character.toLowerCase(c);
         }
 
-        // set buffer in gap buffer as string from current line
-        if (this.document.getCurrentLine().getText() != this.document.getBuffer()) {
-            this.document.setBuffer(this.document.getCurrentLine().getText());
+        int columnIndex = this.caretController.getColumn();
+        int lineIndex = this.caretController.getLine();
 
-            int line = this.caretController.getLine(); int column = this.caretController.getColumn();
+        // if current line index does not correspond to current line in model - change to current line in model
+        if (this.document.getCurrentLine().getLineNumber() != lineIndex) {
+            this.document.setCurrentLine();
         }
 
-        // add character to gap buffer
-        this.document.addTextToBuffer(c);
+        // if current column index is larger than line length, reduce columnIndex
+        int lineLength = this.document.getCurrentLine().getText().length();
+        if (lineLength < columnIndex) {
+            columnIndex = lineLength;
+        }
 
-        // setting current line string and current command as buffer from gap buffer
-        this.document.setCurrentLineText(this.document.getBuffer());
+        // adding character to current line in model
+        this.document.getCurrentLine().addToBuffer(c, columnIndex);
+        this.caretController.setColumn(columnIndex + 1);
 
         // updating current line in view
-        this.view.updateLine(this.document.getLineIndex(), this.document.getCurrentLine().getText());
+        this.view.updateLine(lineIndex, this.document.getCurrentLine().getText());
 
         // updating caret position
         this.caretController.editCaretLine();
@@ -125,82 +141,110 @@ public class TextController {
         int columnIndex = this.document.getColumnIndex();
         int lineIndex = this.document.getLineIndex();
 
+        // if current line index does not correspond to current line in model - change to current line in model
+        if (this.document.getCurrentLine().getLineNumber() != lineIndex) {
+            this.document.setCurrentLine();
+        }
+
+        // if caret is at start position
         if (columnIndex == 0 && lineIndex == 0) {
             return;
         }
 
-        String currentLine = this.document.getCurrentLine().getText();
-
-        if (currentLine.length() == 0) {
-            this.removeEmptyLine(lineIndex);
+        // if current line is empty - remove line
+        if (this.document.getCurrentLine().isEmpty()) {
+            this.removeEmptyLine();
             return;
         }
 
+        // if caret at beginning of line - move text to previous line
         if (columnIndex == 0) {
-            this.appendTextFromRemovedLine(lineIndex);
+            this.appendTextFromRemovedLine(columnIndex);
             return;
         }
 
-        // set buffer in gap buffer as string from current line
-        if (currentLine != this.document.getBuffer()) {
-            this.document.setBuffer(currentLine);
-        }
+        // delete character from line
+        this.document.getCurrentLine().deleteFromBuffer(columnIndex);
+        this.caretController.setColumn(columnIndex - 1);
 
-        // removing character from line
-        this.document.deleteTextFromBuffer();
+        // updating current line in view
+        this.view.updateLine(lineIndex, this.document.getCurrentLine().getText());
 
-        // setting current line string as buffer from gap buffer
-        this.document.setCurrentLineText(this.document.getBuffer());
-
-        // updating line and adding caret to new position
-        this.view.updateLine(this.document.getLineIndex(), this.document.getCurrentLine().getText());
+        // updating caret position
         this.caretController.editCaretLine();
     }
 
-    private String getNewLineText(String s, int lineIndex, int columnIndex) {
-        String res = s.substring(0, columnIndex);
-        this.document.setCurrentLineText(res);
+
+
+
+    private String getNewLineText(int lineIndex, int columnIndex) {
+        // getting newLine text
+        String newLineText = this.document.getCurrentLine().newLineFromBuffer(columnIndex);
+
+        // getting text from old line
+        String res = this.document.getCurrentLine().getText();
+
+        // updating current line in view
         this.view.updateLine(lineIndex, res);
+
+        // updating caret position
         this.caretController.editCaretLine();
 
-        // setting new line as text after caret
-        return this.document.newLineFromBuffer();
+        return newLineText;
     }
 
-    private void removeEmptyLine(int lineIndex) {
+    private void removeEmptyLine() {
+        // delete current line
         this.document.deleteCurrentLine();
 
+        // set caret at the end of the current line
         int currentLineIndex = this.document.getCurrentLine().getLineNumber();
         int currentColumnIndex = this.document.getCurrentLine().getText().length();
         this.caretController.setLine(currentLineIndex);
         this.caretController.setColumn(currentColumnIndex);
 
+        // update text view without the deleted line
         this.updateTextView();
 
+        // update caret position
         this.caretController.editCaretLine();
     }
 
-    private void appendTextFromRemovedLine(int lineIndex) {
-        String s = this.document.getCurrentLine().getText();
+    private void appendTextFromRemovedLine(int columnIndex) {
+        // get text from the deleted line
+        String s = this.document.getCurrentLine().newLineFromBuffer(columnIndex);
+
+        // delete current line
         this.document.deleteCurrentLine();
 
+        // set caret at the end of the current line
         int currentLineIndex = this.document.getCurrentLine().getLineNumber();
         int currentColumnIndex = this.document.getCurrentLine().getText().length();
         this.caretController.setLine(currentLineIndex);
         this.caretController.setColumn(currentColumnIndex);
 
+        // update text view without the deleted line
         this.updateTextView();
 
+        // setting adding text from the deleted line to the current line
         String currentLine = this.document.getCurrentLine().getText();
-        this.document.setCurrentLineText(currentLine + s);
+        this.document.getCurrentLine().setText(currentLine + s);
 
+        // updating current line in view
         this.view.updateLine(currentLineIndex, this.document.getCurrentLine().getText());
+
+        // update caret position
         this.caretController.editCaretLine();
     }
 
     private void updateTextView() {
+        // create array that will contain all the lines in the model as a string
         String[] textData = new String[this.document.getNumberOfLines()];
+
+        // iterator for each line in the model
         Iterator<Line> iterator = this.document.getLineIterator();
+
+        // iterating through the model and adding text from line in array
         int index = 0;
         while (iterator.hasNext()) {
             Line line = iterator.next();
@@ -213,9 +257,15 @@ public class TextController {
             }
         }
 
+        // clearing all text lines from text view
         this.view.clearView();
+
+        // adding all lines to text view
         this.view.setTextView(textData);
     }
+
+
+
 
 
     // activating event handlers...

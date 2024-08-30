@@ -22,7 +22,7 @@ public class NewFile implements ActionListener {
         this.fileController.setFile(null);
 
         this.textController.createTextView();
-        this.textController.setInitialCursorPos();
+        //this.textController.setInitialCursorPos();
         this.textController.activateKeyListner();
         this.textController.activateCharacterKeyListner();
         this.textController.activateFunctionKeyListner();

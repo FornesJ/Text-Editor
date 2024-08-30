@@ -18,11 +18,13 @@ public class CommandController {
         if (this.commandStack.undoDepth() == 0) {
             this.commandStack.write(new Command(CommandType.CARET_POS));
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
+            //System.out.println(this.commandStack.toString());
         }
 
         if (this.commandStack.read().getCommandType() != CommandType.CARET_POS) {
             this.commandStack.write(new Command(CommandType.CARET_POS));
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
+            //System.out.println(this.commandStack.toString());
         }
 
         this.commandStack.read().setNewCaretPos(newLine, newColumn);
@@ -35,11 +37,13 @@ public class CommandController {
         if (this.commandStack.undoDepth() == 0) {
             this.commandStack.write(new Command(CommandType.NEW_TEXT));
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
+            //System.out.println(this.commandStack.toString());
         }
 
         if (this.commandStack.read().getCommandType() != CommandType.NEW_TEXT) {
             this.commandStack.write(new Command(CommandType.NEW_TEXT));
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
+            //System.out.println(this.commandStack.toString());
         }
 
         String s = "";
@@ -59,18 +63,20 @@ public class CommandController {
         if (this.commandStack.undoDepth() == 0) {
             this.commandStack.write(new Command(CommandType.DELETED_TEXT));
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
+            //System.out.println(this.commandStack.toString());
         }
 
         if (this.commandStack.read().getCommandType() != CommandType.DELETED_TEXT) {
             this.commandStack.write(new Command(CommandType.DELETED_TEXT));
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
+            //System.out.println(this.commandStack.toString());
         }
 
         String s = "";
         if (this.commandStack.read().getText() != null) {
             s += this.commandStack.read().getText();
         }
-        s += c;
+        s = c + s;
 
         this.commandStack.read().setText(s);
         this.commandStack.read().setNewCaretPos(newLine, newColumn);
@@ -83,6 +89,7 @@ public class CommandController {
         this.commandStack.write(new Command(CommandType.NEWLINE));
         this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
         this.commandStack.read().setNewCaretPos(newLine, newColumn);
+        //System.out.println(this.commandStack.toString());
     }
 
     // creates a deleted line command
@@ -92,6 +99,7 @@ public class CommandController {
         this.commandStack.write(new Command(CommandType.DELETED_LINE));
         this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
         this.commandStack.read().setNewCaretPos(newLine, newColumn);
+        //System.out.println(this.commandStack.toString());
     }
 
     // get the latest undo command
@@ -101,6 +109,7 @@ public class CommandController {
 
         Command c = this.commandStack.read();
         this.commandStack.undo();
+        //System.out.println(this.commandStack.toString());
         return c;
     }
 
@@ -111,6 +120,7 @@ public class CommandController {
         }
 
         this.commandStack.redo();
+        //System.out.println(this.commandStack.toString());
         Command c = this.commandStack.read();
         return c;
     }
