@@ -2,15 +2,13 @@ package no.text.editor.view.events;
 
 import no.text.editor.controller.FileController;
 import no.text.editor.controller.TextController;
-import no.text.editor.file.TextFile;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 public class NewFile implements ActionListener {
-    private FileController fileController;
-    private TextController textController;
+    private final FileController fileController;
+    private final TextController textController;
 
     public NewFile(FileController fileController, TextController textController) {
         this.fileController = fileController;

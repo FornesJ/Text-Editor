@@ -11,10 +11,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class SaveFile implements ActionListener {
-    private TextController textController;
-    private FileController fileController;
-    private JFrame window;
-    private JFileChooser fileChooser;
+    private final TextController textController;
+    private final FileController fileController;
+    private final JFrame window;
+    private final JFileChooser fileChooser;
 
     public SaveFile(FileController fileController, TextController textController) {
         this.fileController = fileController;

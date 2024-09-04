@@ -1,24 +1,15 @@
 package no.text.editor.commands;
 
-import java.util.Set;
+import no.text.editor.controller.CaretController;
+import no.text.editor.controller.TextController;
 
-public class Command {
-    // command class contains command type, text previous and new caret position
-
-    private CommandType commandType;
+public abstract class Command {
+    // abstract command class contains command text previous and new caret position
     private String text;
     private int[] prevCaretPos;
     private int[] newCaretPos;
 
-    public Command(CommandType commandType) {
-        this.commandType = commandType;
-    }
-
     // getters and setters...
-    public CommandType getCommandType() {
-        return this.commandType;
-    }
-
     public String getText() {
         return text;
     }
@@ -42,4 +33,9 @@ public class Command {
     public void setNewCaretPos(int line, int column) {
         this.newCaretPos = new int[]{line, column};
     }
+
+    // abstract methodes
+    public abstract void undoCommand(TextController textController, CaretController caretController);
+
+    public abstract void redoCommand(TextController textController, CaretController caretController);
 }

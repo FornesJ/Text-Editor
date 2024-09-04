@@ -4,17 +4,14 @@ import no.text.editor.controller.CaretController;
 import no.text.editor.controller.CommandController;
 import no.text.editor.controller.FileController;
 import no.text.editor.controller.TextController;
-import no.text.editor.view.events.CaretKeyHandler;
-import no.text.editor.view.events.CharacterKeyHandler;
-import no.text.editor.view.events.FunctionKeyHandler;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Window {
-    private JFrame window;
-    private Menu menu;
-    private TextView textView;
+    private final JFrame window;
+    private final Menu menu;
+    private final TextView textView;
 
     // constructor
     public Window() {
@@ -68,7 +65,7 @@ public class Window {
         this.menu.addActionListners(fileController, textController);
     }
 
-    public void activateUndoRedoActionListners(CommandController commandController, TextController textController, CaretController caretController) {
-        this.menu.addUndoRedoActionListners(commandController, textController, caretController);
+    public void activateUndoRedoActionListners(CommandController commandController) {
+        this.menu.addUndoRedoActionListners(commandController);
     }
 }

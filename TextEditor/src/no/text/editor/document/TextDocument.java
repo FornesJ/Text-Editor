@@ -1,16 +1,11 @@
 package no.text.editor.document;
 
-import no.text.editor.commands.Command;
-import no.text.editor.commands.CommandStack;
-import no.text.editor.commands.CommandType;
-
 import java.util.Iterator;
-import java.util.LinkedList;
 
 public class TextDocument {
     // TextDocument contains references to all models used
-    private LineList lineList;
-    private Gap gap;
+    private final LineList lineList;
+    private final Gap gap;
 
     public TextDocument() {
         this.lineList = new LineList();

@@ -26,6 +26,7 @@ public class TextEditor {
         CommandController commandController = new CommandController(commandStack);
         CaretController caretController = new CaretController(caretIcon, document, view);
         TextController textController = new TextController(window, view, document, fileController, caretController, commandController);
+        commandController.setControllers(textController, caretController);
 
         // add controllers to view
         view.setCaretController(caretController);
@@ -33,6 +34,6 @@ public class TextEditor {
 
         // activate action listeners
         window.activateMenueActionListners(fileController, textController);
-        window.activateUndoRedoActionListners(commandController, textController, caretController);
+        window.activateUndoRedoActionListners(commandController);
     }
 }

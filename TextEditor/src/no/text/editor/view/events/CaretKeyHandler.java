@@ -6,8 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class CaretKeyHandler implements KeyListener {
-    private CaretController caret;
-    private CommandController commandController;
+    private final CaretController caret;
+    private final CommandController commandController;
 
     // constructor
     public CaretKeyHandler(CaretController caret, CommandController commandController) {
@@ -36,32 +36,32 @@ public class CaretKeyHandler implements KeyListener {
 
         switch (e.getKeyCode()) {
             // if up arrow key is pressed
-            case KeyEvent.VK_UP:
+            case KeyEvent.VK_UP -> {
                 this.caret.setLine(line - 1);
                 this.caret.setCaret();
                 this.writeNewCaretPosCommand(line, column);
-                break;
+            }
             // if down arrow key is pressed
-            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_DOWN -> {
                 this.caret.setLine(line + 1);
                 this.caret.setCaret();
                 this.writeNewCaretPosCommand(line, column);
-                break;
+            }
             // if left arrow key is pressed
-            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_LEFT -> {
                 this.caret.setColumn(column - 1);
                 this.caret.setCaret();
                 this.writeNewCaretPosCommand(line, column);
-                break;
+            }
             // if right arrow key is pressed
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_RIGHT -> {
                 this.caret.setColumn(column + 1);
                 this.caret.setCaret();
                 this.writeNewCaretPosCommand(line, column);
-                break;
+            }
             // else
-            default:
-                break;
+            default -> {
+            }
         }
     }
 

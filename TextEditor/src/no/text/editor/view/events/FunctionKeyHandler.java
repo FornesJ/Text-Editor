@@ -9,9 +9,9 @@ import java.awt.event.KeyListener;
 
 public class FunctionKeyHandler implements KeyListener {
     // class handling function key presses
-    private TextController textController;
-    private CaretController caretController;
-    private CommandController commandController;
+    private final TextController textController;
+    private final CaretController caretController;
+    private final CommandController commandController;
 
     // constructor
     public FunctionKeyHandler(TextController textController, CaretController caretController, CommandController commandController) {
@@ -54,7 +54,6 @@ public class FunctionKeyHandler implements KeyListener {
             case KeyEvent.VK_ENTER:
                 this.newLine();
             default:
-                return;
         }
     }
 

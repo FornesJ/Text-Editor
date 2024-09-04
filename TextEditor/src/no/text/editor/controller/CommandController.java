@@ -1,11 +1,11 @@
 package no.text.editor.controller;
 
-import no.text.editor.commands.Command;
-import no.text.editor.commands.CommandStack;
-import no.text.editor.commands.CommandType;
+import no.text.editor.commands.*;
 
 public class CommandController {
-    private CommandStack commandStack;
+    private final CommandStack commandStack;
+    private TextController textController;
+    private CaretController caretController;
 
     public CommandController(CommandStack commandStack) {
         this.commandStack = commandStack;
@@ -16,13 +16,13 @@ public class CommandController {
         this.checkRedoStack();
 
         if (this.commandStack.undoDepth() == 0) {
-            this.commandStack.write(new Command(CommandType.CARET_POS));
+            this.commandStack.write(new CaretCommand());
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
             //System.out.println(this.commandStack.toString());
         }
 
-        if (this.commandStack.read().getCommandType() != CommandType.CARET_POS) {
-            this.commandStack.write(new Command(CommandType.CARET_POS));
+        if (! (this.commandStack.read() instanceof CaretCommand)) {
+            this.commandStack.write(new CaretCommand());
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
             //System.out.println(this.commandStack.toString());
         }
@@ -35,13 +35,13 @@ public class CommandController {
         this.checkRedoStack();
 
         if (this.commandStack.undoDepth() == 0) {
-            this.commandStack.write(new Command(CommandType.NEW_TEXT));
+            this.commandStack.write(new TextCommand());
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
             //System.out.println(this.commandStack.toString());
         }
 
-        if (this.commandStack.read().getCommandType() != CommandType.NEW_TEXT) {
-            this.commandStack.write(new Command(CommandType.NEW_TEXT));
+        if (! (this.commandStack.read() instanceof TextCommand)) {
+            this.commandStack.write(new TextCommand());
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
             //System.out.println(this.commandStack.toString());
         }
@@ -61,13 +61,13 @@ public class CommandController {
         this.checkRedoStack();
 
         if (this.commandStack.undoDepth() == 0) {
-            this.commandStack.write(new Command(CommandType.DELETED_TEXT));
+            this.commandStack.write(new DeletedTextCommand());
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
             //System.out.println(this.commandStack.toString());
         }
 
-        if (this.commandStack.read().getCommandType() != CommandType.DELETED_TEXT) {
-            this.commandStack.write(new Command(CommandType.DELETED_TEXT));
+        if (! (this.commandStack.read() instanceof DeletedTextCommand)) {
+            this.commandStack.write(new DeletedTextCommand());
             this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
             //System.out.println(this.commandStack.toString());
         }
@@ -86,7 +86,7 @@ public class CommandController {
     public void writeNewLineCommand(int prevLine, int prevColumn, int newLine, int newColumn) {
         this.checkRedoStack();
 
-        this.commandStack.write(new Command(CommandType.NEWLINE));
+        this.commandStack.write(new NewLineCommand());
         this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
         this.commandStack.read().setNewCaretPos(newLine, newColumn);
         //System.out.println(this.commandStack.toString());
@@ -96,33 +96,31 @@ public class CommandController {
     public void writeDeletedLineCommand(int prevLine, int prevColumn, int newLine, int newColumn) {
         this.checkRedoStack();
 
-        this.commandStack.write(new Command(CommandType.DELETED_LINE));
+        this.commandStack.write(new DeletedLineCommand());
         this.commandStack.read().setPrevCaretPos(prevLine, prevColumn);
         this.commandStack.read().setNewCaretPos(newLine, newColumn);
         //System.out.println(this.commandStack.toString());
     }
 
     // get the latest undo command
-    public Command undo() {
+    public void undo() {
         if (this.commandStack.undoDepth() == 0)
-            return null;
+            return;
 
-        Command c = this.commandStack.read();
+        this.commandStack.read().undoCommand(textController, caretController);
         this.commandStack.undo();
         //System.out.println(this.commandStack.toString());
-        return c;
     }
 
     // get the latest redo command
-    public Command redo() {
+    public void redo() {
         if (this.commandStack.redodepth() == 0) {
-            return null;
+            return;
         }
 
         this.commandStack.redo();
         //System.out.println(this.commandStack.toString());
-        Command c = this.commandStack.read();
-        return c;
+        this.commandStack.read().redoCommand(textController, caretController);
     }
 
     // check if redo stack is not empty and in that case clear the stack
@@ -130,5 +128,10 @@ public class CommandController {
         if (this.commandStack.redodepth() > 0) {
             this.commandStack.deleteRedoStack();
         }
+    }
+
+    public void setControllers(TextController textController, CaretController caretController) {
+        this.textController = textController;
+        this.caretController = caretController;
     }
 }

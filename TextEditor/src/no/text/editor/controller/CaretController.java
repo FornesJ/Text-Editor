@@ -7,9 +7,9 @@ import no.text.editor.view.TextView;
 import javax.swing.*;
 
 public class CaretController {
-    private CaretIcon caretIcon;
-    private TextView textView;
-    private TextDocument document;
+    private final CaretIcon caretIcon;
+    private final TextView textView;
+    private final TextDocument document;
 
     // constructor
     public CaretController(CaretIcon caretIcon,

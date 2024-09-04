@@ -1,7 +1,6 @@
 package no.text.editor.controller;
 
 import no.text.editor.document.Line;
-import no.text.editor.document.LineIterator;
 import no.text.editor.document.TextDocument;
 import no.text.editor.view.TextView;
 import no.text.editor.view.Window;
@@ -13,12 +12,12 @@ import javax.swing.*;
 import java.util.Iterator;
 
 public class TextController {
-    private TextView view;
-    private TextDocument document;
-    private FileController fileController;
-    private CaretController caretController;
-    private CommandController commandController;
-    private Window window;
+    private final TextView view;
+    private final TextDocument document;
+    private final FileController fileController;
+    private final CaretController caretController;
+    private final CommandController commandController;
+    private final Window window;
     private boolean isUppercase = false;
 
     // constructor

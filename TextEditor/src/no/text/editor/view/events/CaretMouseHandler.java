@@ -9,8 +9,8 @@ import java.awt.event.MouseListener;
 
 public class CaretMouseHandler implements MouseListener {
     // class places caret where the mouse clicked
-    private CaretController caret;
-    private CommandController commandController;
+    private final CaretController caret;
+    private final CommandController commandController;
 
     // constructor
     public CaretMouseHandler(CaretController caret, CommandController commandController) {
@@ -44,7 +44,7 @@ public class CaretMouseHandler implements MouseListener {
         int prevLine = this.caret.getLine();
         int prevColumn = this.caret.getColumn();
 
-        int column = (int) (e.getX() / 8);
+        int column = e.getX() / 8;
         int line = this.caret.findLine((JLabel) e.getComponent());
 
         if (line >= 0 && line != this.caret.getLine())

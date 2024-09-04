@@ -9,7 +9,7 @@ import no.text.editor.view.events.*;
 import javax.swing.*;
 
 public class Menu {
-    private JMenuBar menuBar;
+    private final JMenuBar menuBar;
     private JMenu file, edit, help, undoRedo;
     private JMenuItem newFile, openFile, saveFile, closeFile, cut, copy, paste, selectAll, delete, about, undo, redo;
     //private JButton undo, redo;
@@ -90,8 +90,8 @@ public class Menu {
         this.newFile.addActionListener(new NewFile(fileController, textController));
     }
 
-    public void addUndoRedoActionListners(CommandController commandController, TextController textController, CaretController caretController) {
-        this.undo.addActionListener(new UndoHandler(commandController, textController, caretController));
-        this.redo.addActionListener(new RedoHandler(commandController, textController, caretController));
+    public void addUndoRedoActionListners(CommandController commandController) {
+        this.undo.addActionListener(new UndoHandler(commandController));
+        this.redo.addActionListener(new RedoHandler(commandController));
     }
 }

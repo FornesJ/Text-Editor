@@ -5,8 +5,8 @@ import java.util.Stack;
 public class CommandStack {
     // command stack class creates an object that contains a undo and redo stack
 
-    private Stack<Command> undo;
-    private Stack<Command> redo;
+    private final Stack<Command> undo;
+    private final Stack<Command> redo;
 
     public CommandStack() {
         this.undo = new Stack<>();
@@ -61,13 +61,13 @@ public class CommandStack {
     public String toString() {
         String undo = "";
         for (Command c: this.undo) {
-            undo += c.getCommandType().toString() + ", ";
+            undo += c.getClass().toString() + ", ";
         }
 
         String redo = "";
 
         for (Command c: this.redo) {
-            redo += c.getCommandType().toString() + ", ";
+            redo += c.getClass().toString() + ", ";
         }
 
         return "undo\n(" + undo + ")\nredo\n(" + redo + ")\n";

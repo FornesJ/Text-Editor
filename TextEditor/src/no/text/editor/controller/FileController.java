@@ -1,7 +1,6 @@
 package no.text.editor.controller;
 
 import no.text.editor.document.Line;
-import no.text.editor.document.LineIterator;
 import no.text.editor.document.TextDocument;
 import no.text.editor.file.TextFile;
 
@@ -10,7 +9,7 @@ import java.util.Iterator;
 public class FileController {
     // filecontroller class contains reference to textfile object and textDocument object
     private TextFile file;
-    private TextDocument document;
+    private final TextDocument document;
 
     public FileController(TextDocument document) {
         this.document = document;

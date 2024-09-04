@@ -1,10 +1,8 @@
 package no.text.editor.document;
 
-import javax.swing.*;
-
 public class Line {
     //private String text; // text content in line
-    private GapBuffer gapBuffer;
+    private final GapBuffer gapBuffer;
     private int lineNumber; // line number
     private Line nextLine; // pointer to nextline
     private Line prevLine; // pointer to prev line

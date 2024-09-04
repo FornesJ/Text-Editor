@@ -11,10 +11,10 @@ import java.io.File;
 
 public class OpenFile implements ActionListener {
 
-    private FileController fileController;
-    private TextController textController;
-    private JFrame window;
-    private JFileChooser fileChooser;
+    private final FileController fileController;
+    private final TextController textController;
+    private final JFrame window;
+    private final JFileChooser fileChooser;
 
     public OpenFile(FileController fileController, TextController textController) {
         this.fileController = fileController;

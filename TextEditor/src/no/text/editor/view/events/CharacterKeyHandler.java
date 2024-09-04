@@ -10,9 +10,9 @@ import java.awt.event.KeyListener;
 
 public class CharacterKeyHandler implements KeyListener {
     // class handling character key presses
-    private TextController textController;
-    private CaretController caretController;
-    private CommandController commandController;
+    private final TextController textController;
+    private final CaretController caretController;
+    private final CommandController commandController;
 
     public CharacterKeyHandler(TextController textController, CaretController caretController, CommandController commandController) {
         this.textController = textController;

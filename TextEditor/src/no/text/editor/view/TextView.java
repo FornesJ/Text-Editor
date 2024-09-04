@@ -13,8 +13,8 @@ public class TextView {
     private final Color BACK_GROUND_COLOR = new Color(255, 255, 255);
     private final Font DEFAULT_FONT = new Font("Arial", Font.TRUETYPE_FONT, this.DEFAULT_TEXT_SIZE);
     private final String NEWLINE = "\n";
-    private JPanel textView;
-    private JScrollPane scrollPane;
+    private final JPanel textView;
+    private final JScrollPane scrollPane;
     private CaretController caretController;
     private CommandController commandController;
     private int numberOfLines;

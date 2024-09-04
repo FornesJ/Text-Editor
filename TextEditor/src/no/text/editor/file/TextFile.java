@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class TextFile {
-    private String fileName;
-    private String path;
-    private File file;
+    private final String fileName;
+    private final String path;
+    private final File file;
 
     public TextFile(File file) {
         this.file = file;

@@ -89,8 +89,6 @@ public class CommandStack {
 
 ### Bugs and issues (2024-08-07)
 
-* Command objects storing newlines or deleted lines do not store the text that is transferred to the new line. This sometimes causes text after the caret in the newline or deleted line to be deleted.
-
 * To many newlines and deleted lines can cause reading current line as a **null** instead of an empty string.
 
 * Event handlers for "copy", "cut", "paste" and "select all" have not been implemented yet.
