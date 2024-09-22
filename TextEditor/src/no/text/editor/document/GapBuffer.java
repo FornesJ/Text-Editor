@@ -1,12 +1,23 @@
 package no.text.editor.document;
 
+/**
+ * GapBuffer class is the main data structure used to store text from the line.
+ * It works by storing each character in the text in a buffer. The buffer has a Gap
+ * that can be dynamically filled up as text is written to the line.
+ *
+ * For more information see link to wiki of a {@link <a href="https://en.wikipedia.org/wiki/Gap_buffer">gap buffer</a>}
+ * data structure
+ */
 public class GapBuffer {
-    private static final int GAP_SIZE = 10;
-    private char []buffer;
-    private int left;
-    private int right;
-    private int size;
+    private static final int GAP_SIZE = 10; // standard gap size
+    private char []buffer; // buffer
+    private int left; // left side position of the gap
+    private int right; // right size position of the gap
+    private int size; // size of the buffer
 
+    /**
+     * Constructor initializes buffer, left pointer, right pointer and size
+     */
     public GapBuffer() {
         this.buffer = new char[GAP_SIZE];
         this.left = 0;
@@ -14,7 +25,12 @@ public class GapBuffer {
         this.size = GAP_SIZE;
     }
 
-    // add character to buffer
+    /**
+     * Method adds character to buffer
+     *
+     * @param c is the character to be added
+     * @param position integer where the character will be placed
+     */
     public void insertToBuffer(char c, int position) {
         if (this.left != position)
             this.moveGap(position);
@@ -23,10 +39,15 @@ public class GapBuffer {
             this.growBuffer();
 
         this.buffer[this.left] = c;
-        //this.gap.setColumnIndex(position + 1);
+
         this.left++;
     }
 
+    /**
+     * Method deletes char from buffer
+     *
+     * @param position integer where which char is to be deleted
+     */
     public void deleteFromBuffer(int position) {
         if (this.left != position)
             this.moveGap(position);
@@ -38,11 +59,17 @@ public class GapBuffer {
             return;
 
         this.buffer[this.left - 1] = 0;
-        //this.gap.setColumnIndex(this.gap.getColumnIndex() - 1);
+
         this.left--;
     }
 
-    // returns string after caret
+    /**
+     * Gets the text to be set in a new line
+     *
+     * @param position integer position of the caret
+     *
+     * @return string after caret
+     */
     public String newLineFromBuffer(int position) {
         if (this.left != position)
             this.moveGap(position);
@@ -64,6 +91,9 @@ public class GapBuffer {
         return s;
     }
 
+    /**
+     * Helper method grows the size of the buffer to fit more characters
+     */
     private void growBuffer() {
         // new buffer with added gap
         char []newBuffer = new char[this.size + GAP_SIZE];
@@ -81,6 +111,9 @@ public class GapBuffer {
         this.size = this.buffer.length;
     }
 
+    /**
+     * Helper method reduces the size of the buffer to save memory space
+     */
     private void reduceBuffer() {
         // new buffer with smaller gap
         char []newBuffer = new char[this.size - GAP_SIZE - 1];
@@ -98,6 +131,11 @@ public class GapBuffer {
         this.size = this.buffer.length;
     }
 
+    /**
+     * Helper method moves gap left
+     *
+     * @param position integer position of the caret
+     */
     private void moveGapLeft(int position) {
         while (position < this.left) {
             this.left--;
@@ -107,6 +145,11 @@ public class GapBuffer {
         }
     }
 
+    /**
+     * Helper method moves gap right
+     *
+     * @param position integer position of the caret
+     */
     private void moveGapRight(int position) {
         while (position > this.left) {
             this.left++;
@@ -116,6 +159,11 @@ public class GapBuffer {
         }
     }
 
+    /**
+     * Helper method to move the gap to where the caret is positioned
+     *
+     * @param position position of the caret
+     */
     private void moveGap(int position) {
         if (position < this.left)
             this.moveGapLeft(position);
@@ -124,8 +172,11 @@ public class GapBuffer {
     }
 
 
-
-    // getters and setter for buffer...
+    /**
+     * Method sets text from string in to the buffer
+     *
+     * @param s string with text from the line
+     */
     public void setBuffer(String s) {
         // creating new buffer
         this.buffer = new char[GAP_SIZE];
@@ -141,6 +192,11 @@ public class GapBuffer {
         }
     }
 
+    /**
+     * Method gets text as a strings from the buffer
+     *
+     * @return string of text from the buffer
+     */
     public String getBuffer() {
         if (this.buffer == null)
             return null;
@@ -164,7 +220,11 @@ public class GapBuffer {
         return s;
     }
 
-    // check if its empty
+    /**
+     * Checks if its empty
+     *
+     * @return boolean value
+     */
     public boolean isEmpty() {
         for (int c = 0; c < this.buffer.length; c++) {
             if (this.buffer[c] != (char) 0) {
@@ -174,6 +234,11 @@ public class GapBuffer {
         return true;
     }
 
+    /**
+     * Gets string of the whole buffer
+     *
+     * @return string of buffer
+     */
     @Override
     public String toString() {
         if (this.buffer == null)

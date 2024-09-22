@@ -1,12 +1,21 @@
 package no.text.editor.view;
 
 import javax.swing.*;
-
+/**
+ * CaretIcon object displays cursor on the view
+ *
+ */
 public class CaretIcon {
-    private final String CURSOR_ICON = "|";
-    private JLabel line;
-    private int pos;
+    private final String CURSOR_ICON = "|"; // CURSOR_ICON string symbol for the caret
+    private JLabel line; // line JLabel object referencing current line where the caret is
+    private int pos; // pos integer referencing caret column position in the line
 
+    /**
+     * Public method places caret in specified position in the provided JLabel line
+     *
+     * @param line JLabel object where the caret will be placed
+     * @param pos integer position describing which column the caret will be placed
+     */
     public void editCaretLine(JLabel line, int pos) {
         this.line = line;
         if (pos >= this.line.getText().length()) {
@@ -17,7 +26,11 @@ public class CaretIcon {
         this.addCaretToLine();
     }
 
-    // placing caretn in a new line
+    /**
+     * Public method placing caret in a new line
+     *
+     * @param line JLabel object where the caret will be placed
+     */
     public void setCaretLine(JLabel line) {
         JLabel prevLine = this.line;
         if (prevLine != null)
@@ -26,7 +39,11 @@ public class CaretIcon {
         this.addCaretToLine();
     }
 
-    // placing caret in a new column
+    /**
+     * Public method placing caret in a new column
+     *
+     * @param pos integer position describing which column the caret will be placed
+     */
     public void setCaretColumn(int pos) {
         this.removeCaretFromLine();
         if (pos >= this.line.getText().length()) {
@@ -37,7 +54,9 @@ public class CaretIcon {
         this.addCaretToLine();
     }
 
-    // adding caret icon to line
+    /**
+     * Private method adding caret icon to line
+     */
     private void addCaretToLine() {
         if (this.line.getText().equals(" "))
             this.pos = 0;
@@ -51,7 +70,9 @@ public class CaretIcon {
         this.line.setText(s.toString());
     }
 
-    // removing caret icon from line
+    /**
+     * Private method removing caret icon from line
+     */
     private void removeCaretFromLine() {
         StringBuffer s = new StringBuffer(this.line.getText());
 

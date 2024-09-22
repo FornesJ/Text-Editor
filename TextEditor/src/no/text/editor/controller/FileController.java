@@ -6,16 +6,27 @@ import no.text.editor.file.TextFile;
 
 import java.util.Iterator;
 
+/**
+ * FileController class contains reference to TextFile object and TextDocument object
+ */
 public class FileController {
-    // filecontroller class contains reference to textfile object and textDocument object
-    private TextFile file;
-    private final TextDocument document;
+    private TextFile file; // reference to text file object
+    private final TextDocument document; // reference to the document/model
 
+    /**
+     * Constructor initializes document
+     *
+     * @param document Document object
+     */
     public FileController(TextDocument document) {
         this.document = document;
     }
 
-    // reads text from file and returns array of strings
+    /**
+     * Reads text from file in to an array of strings
+     *
+     * @return array of strings
+     */
     public String[] readTextFile() {
         if (this.file == null) {
             return new String[0];
@@ -23,7 +34,9 @@ public class FileController {
         return file.readFile();
     }
 
-    // writes text to textfile from textDocument
+    /**
+     * Writes text to TextFile from TextDocument
+     */
     public void writeToTextFile() {
         String[] textData = new String[this.document.getNumberOfLines()];
         Iterator<Line> iterator = this.document.getLineIterator();
@@ -35,7 +48,10 @@ public class FileController {
         this.file.writeToFile(textData);
     }
 
-    // getters and setters for textFile
+    /**
+     * Getters and setters for TextFile reference
+     */
+
     public TextFile getFile() {
         return file;
     }

@@ -6,12 +6,22 @@ import no.text.editor.view.TextView;
 
 import javax.swing.*;
 
+/**
+ * CaretController class function as controller for the caret.
+ * Contains reference to caretIcon, text view and document/model
+ */
 public class CaretController {
-    private final CaretIcon caretIcon;
-    private final TextView textView;
-    private final TextDocument document;
+    private final CaretIcon caretIcon; // reference to caret
+    private final TextView textView; // reference to text view
+    private final TextDocument document; // reference to document/model
 
-    // constructor
+    /**
+     * Constructor initializes class variables and setting default caret position
+     *
+     * @param caretIcon CaretIcon object
+     * @param document Document object
+     * @param textView TextView object
+     */
     public CaretController(CaretIcon caretIcon,
                            TextDocument document,
                            TextView textView) {
@@ -22,13 +32,9 @@ public class CaretController {
         this.textView = textView;
     }
 
-
-
-
-
-    // methodes for setting caret in text view...
-
-    // setting both witch line and column the caret is placed
+    /**
+     * Method setting both witch line and column the caret is placed
+     */
     public void setCaret() {
         if (this.textView.getNumberOfLines() < 0)
             return;
@@ -41,6 +47,9 @@ public class CaretController {
         this.caretIcon.setCaretColumn(columnIndex);
     }
 
+    /**
+     * Method for editing caret in current line
+     */
     public void editCaretLine() {
         int lineIndex = this.document.getLineIndex();
         int columnIndex = this.document.getColumnIndex();
@@ -48,7 +57,13 @@ public class CaretController {
         this.caretIcon.editCaretLine(line, columnIndex);
     }
 
-    // finding specified line, if line does not exist, return -1
+    /**
+     * Method finding specified line
+     *
+     * @param label JLabel object of current line
+     *
+     * @return integer of current line, if line does not exist, return -1
+     */
     public int findLine(JLabel label) {
         JLabel[] labels = this.textView.getLines();
         for (int i = 0; i < labels.length; i++) {
@@ -59,9 +74,10 @@ public class CaretController {
     }
 
 
+    /**
+     * Getters and setters for line and column in gap model...
+     */
 
-
-    // getters and setters for line and column in gap model...
     public int getLine() {
         return this.document.getLineIndex();
     }

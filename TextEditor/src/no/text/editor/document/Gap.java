@@ -1,9 +1,15 @@
 package no.text.editor.document;
 
+/**
+ * Class Gap functioning as a model for holding current line and column placement of caret and gap
+ */
 public class Gap {
-    // class gap functioning as a model for holding current line and culumn placement of caret and gap
-    private int lineIndex;
-    private int columnIndex;
+    private int lineIndex; // integer of caret line position
+    private int columnIndex; // integer of caret column position
+
+    /**
+     * Getters and setters for line index and line column index
+     */
 
     public void setLineIndex(int index) {
         this.lineIndex = index;
@@ -21,6 +27,11 @@ public class Gap {
         return this.columnIndex;
     }
 
+    /**
+     * String of caret position
+     *
+     * @return string of position of caret/gap
+     */
     @Override
     public String toString() {
         return "line: " + this.lineIndex + " column: " + this.columnIndex;

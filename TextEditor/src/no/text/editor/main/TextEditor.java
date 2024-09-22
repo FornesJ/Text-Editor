@@ -10,7 +10,23 @@ import no.text.editor.view.CaretIcon;
 import no.text.editor.view.TextView;
 import no.text.editor.view.Window;
 
+/**
+ * <h1>Text editor made in Java</h1>
+ * This is a text editor made in java with openjdk version "18.0.1.1" 2022-04-22. It mainly uses the java libraries 
+ * Swing and AWT for creating the desktop app. However instead of just using the standard text area component 
+ * from the Swing library, the text editing functions are built from the ground up.
+ * 
+ * 
+ * @author Jørgen Traasdahl Fornes
+ * 
+ */
 public class TextEditor {
+    /**
+     * This is the main method that creates all the swing objects as view, docuemnt and command stack for as the model
+     * and creates the controllers used for the program.
+     * 
+     * @return Nothing.
+     */
     public static void main(String[] args) {
         // views
         Window window = new Window();

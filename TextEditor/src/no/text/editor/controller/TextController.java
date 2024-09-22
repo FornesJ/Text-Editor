@@ -8,19 +8,31 @@ import no.text.editor.view.events.CaretKeyHandler;
 import no.text.editor.view.events.CharacterKeyHandler;
 import no.text.editor.view.events.FunctionKeyHandler;
 
-import javax.swing.*;
 import java.util.Iterator;
 
+/**
+ * TextController functions as a controller for text edited in the view
+ * Contains reference to view, document/model, controllers and window
+ */
 public class TextController {
-    private final TextView view;
-    private final TextDocument document;
-    private final FileController fileController;
-    private final CaretController caretController;
-    private final CommandController commandController;
-    private final Window window;
-    private boolean isUppercase = false;
+    private final TextView view; // reference to the view
+    private final TextDocument document; // reference to the document
+    private final FileController fileController; // reference to file controller
+    private final CaretController caretController; // reference to caret controller
+    private final CommandController commandController; // reference to command controller
+    private final Window window; // reference to window
+    private boolean isUppercase = false; // boolean for describing if text should be written in uppercase
 
-    // constructor
+    /**
+     * Initializes class variables
+     *
+     * @param window Window object
+     * @param view View object
+     * @param document document object
+     * @param fileController controller
+     * @param caretController controller
+     * @param commandController controller
+     */
     public TextController(Window window,
                           TextView view,
                           TextDocument document,
@@ -35,6 +47,10 @@ public class TextController {
         this.commandController = commandController;
     }
 
+    /**
+     * Setters for uppercase/lowercase
+     */
+
     public void setToUpperCase() {
         this.isUppercase = true;
     }
@@ -43,6 +59,9 @@ public class TextController {
         this.isUppercase = false;
     }
 
+    /**
+     * Method gets text from document/model and writes it in to the view
+     */
     public void createTextView() {
         // getting all text from file as an array of strings
         String[] textData = fileController.readTextFile();
@@ -63,11 +82,19 @@ public class TextController {
         this.caretController.setCaret();
     }
 
+    /**
+     * Getter fro current line in model
+     *
+     * @return current line as a string
+     */
     public String getCurrentLine() {
         // return current line as a string
         return this.document.getCurrentLine().getText();
     }
 
+    /**
+     * adds new a line to the model
+     */
     public void addNewLine() {
         Line line = this.document.getCurrentLine();
         if (line != null) {
@@ -105,6 +132,11 @@ public class TextController {
         this.caretController.setCaret();
     }
 
+    /**
+     * Adds a character to the current line
+     *
+     * @param c character to be added
+     */
     public void addTextToLine(char c) {
         // checking if set to uppercase
         if (! this.isUppercase) {
@@ -136,6 +168,9 @@ public class TextController {
         this.caretController.editCaretLine();
     }
 
+    /**
+     * Deletes text from the current line. Deletes the entire line if the position of the caret is 0
+     */
     public void deleteTextFromLine() {
         int columnIndex = this.document.getColumnIndex();
         int lineIndex = this.document.getLineIndex();
@@ -174,8 +209,14 @@ public class TextController {
     }
 
 
-
-
+    /**
+     * Helper method gets text after caret for the new line
+     *
+     * @param lineIndex integer of the old line to remove text from
+     * @param columnIndex integer of the caret column position
+     *
+     * @return String of text after caret
+     */
     private String getNewLineText(int lineIndex, int columnIndex) {
         // getting newLine text
         String newLineText = this.document.getCurrentLine().newLineFromBuffer(columnIndex);
@@ -192,6 +233,9 @@ public class TextController {
         return newLineText;
     }
 
+    /**
+     * Helper method removes empty line
+     */
     private void removeEmptyLine() {
         // delete current line
         this.document.deleteCurrentLine();
@@ -209,6 +253,11 @@ public class TextController {
         this.caretController.editCaretLine();
     }
 
+    /**
+     * Helper method adds text from removed line to the previous line
+     *
+     * @param columnIndex column position of the caret
+     */
     private void appendTextFromRemovedLine(int columnIndex) {
         // get text from the deleted line
         String s = this.document.getCurrentLine().newLineFromBuffer(columnIndex);
@@ -236,6 +285,9 @@ public class TextController {
         this.caretController.editCaretLine();
     }
 
+    /**
+     * Helper method updates textview with text from the model
+     */
     private void updateTextView() {
         // create array that will contain all the lines in the model as a string
         String[] textData = new String[this.document.getNumberOfLines()];
@@ -264,10 +316,9 @@ public class TextController {
     }
 
 
-
-
-
-    // activating event handlers...
+    /**
+     * Methods for activating event handlers...
+     */
 
     public void activateKeyListner() {
         this.window.getWindow().addKeyListener(new CaretKeyHandler(this.caretController, this.commandController));

@@ -8,12 +8,18 @@ import no.text.editor.view.events.*;
 
 import javax.swing.*;
 
+/**
+ * Menu object displays menu items in text editor window
+ *
+ */
 public class Menu {
-    private final JMenuBar menuBar;
-    private JMenu file, edit, help, undoRedo;
-    private JMenuItem newFile, openFile, saveFile, closeFile, cut, copy, paste, selectAll, delete, about, undo, redo;
-    //private JButton undo, redo;
+    private final JMenuBar menuBar; // menuBar Swing component displays menu bar
+    private JMenu file, edit, help, undoRedo; // menu objects displays menu categories
+    private JMenuItem newFile, openFile, saveFile, closeFile, cut, copy, paste, selectAll, delete, about, undo, redo; // menu items in the menu categories
 
+    /**
+     * Constructor creates all the swing component stored in the menu object and assigns event handlers to them
+     */
     public Menu() {
         // file menu...
         this.newFile = new JMenuItem("New");
@@ -80,16 +86,30 @@ public class Menu {
         this.menuBar.add(this.undoRedo);
     }
 
+    /**
+     * @return Swing menu bar component
+     */
     public JMenuBar getMenu() {
         return this.menuBar;
     }
 
+    /**
+     * Public method ads action listeners that require references to controllers
+     *
+     * @param fileController reference to the file controller
+     * @param textController reference to the text controller
+     */
     public void addActionListners(FileController fileController, TextController textController) {
         this.openFile.addActionListener(new OpenFile(fileController, textController));
         this.saveFile.addActionListener(new SaveFile(fileController, textController));
         this.newFile.addActionListener(new NewFile(fileController, textController));
     }
 
+    /**
+     * Public method ads action listeners that require references to controllers
+     *
+     * @param commandController reference to command controller
+     */
     public void addUndoRedoActionListners(CommandController commandController) {
         this.undo.addActionListener(new UndoHandler(commandController));
         this.redo.addActionListener(new RedoHandler(commandController));

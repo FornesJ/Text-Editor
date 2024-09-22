@@ -3,9 +3,14 @@ package no.text.editor.commands;
 import no.text.editor.controller.CaretController;
 import no.text.editor.controller.TextController;
 
+/**
+ * NewLineCommand is a subclass inheriting from Command
+ * Implements undo and redo command methods.
+ */
 public class NewLineCommand extends Command {
     @Override
     public void undoCommand(TextController textController, CaretController caretController) {
+        // delete
         if (caretController.getLine() != this.getNewCaretPos()[0] || caretController.getColumn() != this.getNewCaretPos()[1]) {
             textController.deleteTextFromLine();
             caretController.setLine(this.getNewCaretPos()[0]);

@@ -59,14 +59,12 @@ public class GapBuffer {
 
 ### Handling undo and redo
 
-Having undo and redo functionality in a text editor is a must have, however implementing this functionality can be tricky. First there needs to be a way of storing text, placement of the caret, deletion and so on. Then when the undo/redo functionality is called, each action needs to be undone/redone in a consecutive order of how they were performed originally.
+Having undo and redo functionality in a text editor is a “must have”, however implementing this functionality can be tricky. First there needs to be a way of storing text, placement of the caret, deletion and so on. Then when the undo/redo functionality is called, each action needs to be undone/redone in a consecutive order of how they were performed originally.
 
-In this text editor each action performed whether it is a placement of caret, text written, newline or deletion, is stored in a command object from the ``Command`` class. Here the action/command type, previous caret position, new caret position and text is stored. This enables a simple way of storing actions performed and that describes what type of action was performed.
+In this text editor each action performed whether it is a placement of caret, text written, newline or deletion, is stored in a command object from one of the command subclasses that are inherited from the ``Command`` class. Here the previous caret position, new caret position and text is stored. Objects of subclasses ``CaretCommand``, ``DeletedLineCommand``, ``DeletedTextCommand``, ``NewLineCommand`` and ``TextCommand`` are created depending on what kind of action was performed. This enables a simple way of storing actions performed and that describes what type of action was performed.
 
 ``` java
-public class Command {
-	// command class contains command type, text previous and new caret position
-	private CommandType commandType;
+public abstract class Command {
 	private String text;
 	private int[] prevCaretPos;
 	private int[] newCaretPos;

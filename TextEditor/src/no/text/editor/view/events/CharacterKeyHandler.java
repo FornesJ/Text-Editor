@@ -3,7 +3,6 @@ package no.text.editor.view.events;
 import no.text.editor.controller.CaretController;
 import no.text.editor.controller.CommandController;
 import no.text.editor.controller.TextController;
-import no.text.editor.main.TextEditor;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

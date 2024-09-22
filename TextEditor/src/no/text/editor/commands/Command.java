@@ -3,13 +3,18 @@ package no.text.editor.commands;
 import no.text.editor.controller.CaretController;
 import no.text.editor.controller.TextController;
 
+/**
+ * Abstract Command class contains command text previous and new caret position
+ */
 public abstract class Command {
-    // abstract command class contains command text previous and new caret position
     private String text;
     private int[] prevCaretPos;
     private int[] newCaretPos;
 
-    // getters and setters...
+    /**
+     *  Getters and setters for text, previous caret position and new caret position
+     */
+
     public String getText() {
         return text;
     }
@@ -34,8 +39,19 @@ public abstract class Command {
         this.newCaretPos = new int[]{line, column};
     }
 
-    // abstract methodes
+    /**
+     * Abstract method for undo a command
+     *
+     * @param textController TextController object
+     * @param caretController CaretController object
+     */
     public abstract void undoCommand(TextController textController, CaretController caretController);
 
+    /**
+     * Abstract method for redo a command
+     *
+     * @param textController TextController object
+     * @param caretController CaretController object
+     */
     public abstract void redoCommand(TextController textController, CaretController caretController);
 }
