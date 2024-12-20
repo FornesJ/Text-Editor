@@ -10,12 +10,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+/**
+ * Instance of class for saving file
+ */
 public class SaveFile implements ActionListener {
     private final TextController textController;
     private final FileController fileController;
     private final JFrame window;
     private final JFileChooser fileChooser;
 
+    /**
+     * constructor initializes variables
+     *
+     * @param fileController reference to class FileController
+     * @param textController reference to class TextController
+     */
     public SaveFile(FileController fileController, TextController textController) {
         this.fileController = fileController;
         this.textController = textController;
@@ -23,6 +32,11 @@ public class SaveFile implements ActionListener {
         this.fileChooser = new JFileChooser();
     }
 
+    /**
+     * Method writes text to file
+     *
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (this.fileController.getFile() == null) {

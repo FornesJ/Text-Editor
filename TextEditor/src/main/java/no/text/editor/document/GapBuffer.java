@@ -123,7 +123,7 @@ public class GapBuffer {
                 newBuffer[c] = this.buffer[c];
 
             if (c > this.right)
-                newBuffer[c - GAP_SIZE] = this.buffer[c];
+                newBuffer[c - GAP_SIZE - 1] = this.buffer[c];
         }
 
         this.right = this.left + GAP_SIZE;

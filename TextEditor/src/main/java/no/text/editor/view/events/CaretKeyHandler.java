@@ -5,11 +5,20 @@ import no.text.editor.controller.CommandController;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * Instance of CaretKeyHandler class contains references to caret controller and command controller
+ * has methods for moving the caret position and storing actions in a command object
+ */
 public class CaretKeyHandler implements KeyListener {
-    private final CaretController caret;
-    private final CommandController commandController;
+    private final CaretController caret; // reference to caretController
+    private final CommandController commandController; // reference to commandController
 
-    // constructor
+    /**
+     * Constructor initializes class variables caret and commandController
+     *
+     * @param caret reference to CaretController object
+     * @param commandController reference to CommandController object
+     */
     public CaretKeyHandler(CaretController caret, CommandController commandController) {
         this.caret = caret;
         this.commandController = commandController;
@@ -29,6 +38,11 @@ public class CaretKeyHandler implements KeyListener {
     public void keyReleased(KeyEvent e) {
     }
 
+    /**
+     * private method places caret depending on which arrow key was pressed
+     *
+     * @param e KeyEvent object
+     */
     private void placeCaret(KeyEvent e) {
         // calling caret controller if any of the arrow keys are pressed
         int line = this.caret.getLine();

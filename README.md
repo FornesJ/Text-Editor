@@ -5,6 +5,20 @@ It mainly uses the java libraries Swing and AWT for creating the desktop app. Ho
 
 ---------------------------------------------------------------------------------
 
+### How to run program
+
+Compile code:
+``` bash
+mvn clean package
+```
+
+Run .jar file:
+``` bash
+java -jar target/TextEditor-1.0.jar
+```
+
+---------------------------------------------------------------------------------
+
 ### Text editor architecture
 
 ![Text editor architecture](/img/text-editor.drawio.png)

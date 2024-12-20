@@ -7,12 +7,19 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ * Instance of CaretMouseHandler class places' caret where the mouse is clicked clicked
+ */
 public class CaretMouseHandler implements MouseListener {
-    // class places caret where the mouse clicked
-    private final CaretController caret;
-    private final CommandController commandController;
+    private final CaretController caret; // reference to CaretController
+    private final CommandController commandController; // reference to CommandController
 
-    // constructor
+    /**
+     * Constructor initializes class variables
+     *
+     * @param caret CaretController object
+     * @param commandController CommandController object
+     */
     public CaretMouseHandler(CaretController caret, CommandController commandController) {
         this.caret = caret;
         this.commandController = commandController;
@@ -39,7 +46,11 @@ public class CaretMouseHandler implements MouseListener {
     public void mouseExited(MouseEvent e) {
     }
 
-    // placing caret by finding which line and column mouse button was clicked/pressed
+    /**
+     * placing caret by finding which line and column mouse button was clicked/pressed
+     *
+     * @param e KeyEvent object
+     */
     private void placeCaret(MouseEvent e) {
         int prevLine = this.caret.getLine();
         int prevColumn = this.caret.getColumn();
